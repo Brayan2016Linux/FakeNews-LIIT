@@ -1,0 +1,41 @@
+{% extends 'Scrapper/base.html' %}
+{% block title %}Login{% endblock %}
+{% block register_active %}active{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Login</h3>
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'Scrapper/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Login</button>
+                                <script>
+                                    function clickAlert() {
+                                      alert("Para recuperar su contraseña debe enviar un email con los datos de su usuario a: estebanfelipecg@uned.cr");
+                                  }
+                                  </script>
+                                  
+                                  
+                            </div>
+                        </div>
+                        <input type="button" class="btn btn-alert" onclick="clickAlert()" value="Olvidé mi contraseña">
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

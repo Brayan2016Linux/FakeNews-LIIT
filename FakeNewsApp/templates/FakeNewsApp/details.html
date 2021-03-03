@@ -1,0 +1,44 @@
+{% extends 'Scrapper/base.html' %}
+
+{% block title %}Detalles{% endblock %}
+
+{% block body %}
+
+<div class="row">
+  <div class="col-xs-6 col-md-11">
+      <div class="panel panel-defualt">
+          <div class="panel-body">
+            <h1>{{ newarticle.title }}</h1>
+            <ul>
+              <li>{{ newarticle.text }}</li>
+              <li>{{ newarticle.published_date }}</li>
+              {% if newarticle.url != None %}
+                <li><a href="{{ newarticle.url }}">{{ newarticle.url }}</a></li>
+              {% else %}
+                <li>{{ newarticle.url }}</li>
+              {% endif %}
+              <li>{{ newarticle.site_name }}</li>
+            </ul>
+            <!-- Delete Article -->
+            <form action="{% url 'Scrapper:delete-article' newarticle.id %}" method="post" style="display: inline;">
+              {% csrf_token %}
+              <input type="hidden" name="newarticle_id" value="{{ newarticle.id }}" />
+              <button type="submit" class="btn btn-danger btn-xs">
+                  <span class="glyphicon glyphicon-trash"></span>
+              </button>
+            </form>
+            <!-- Update Article -->
+            <form action="{% url 'Scrapper:update-article' newarticle.id %}" method="get" style="display: inline;">
+              {% csrf_token %}
+              
+              <button type="submit" class="btn btn-default btn-sm">
+                  <span class="glyphicon glyphicon-pencil"></span>
+              </button>
+            </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+{% endblock %}

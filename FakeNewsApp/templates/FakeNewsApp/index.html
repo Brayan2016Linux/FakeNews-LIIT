@@ -1,0 +1,77 @@
+
+{% extends 'FakeNewsApp/base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<!-- Header Wrapper -->
+<div id="header-wrapper" class= "banner">
+        <div class="5grid-layout">
+            <div class="row">
+                <div class="12u">
+                        
+                        <!-- Banner -->
+                        <div id="banner">
+                            <h2 ><strong>Fake News App:</strong> 
+                                plataforma de ...........................................</p>
+                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                <div class="form-group">
+                                <label class="control-label col-sm-5">Ingrese el enlace a la noticia: </label>
+                                <input id="url" type="text" name="url"class="control-input col-sm-5">
+                                
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-success">Analizar</button>
+                                    </div>
+                                </div>
+                                
+                                    
+                                
+                            </form>
+                        </div>
+                        {% if hit is True %}
+                                    <div id ="banner">
+                                        <ul style="list-style: none;">
+                                            <li>Dominio:<h3><strong>{{ data.0|safe }}</li></strong></h3>
+                                            <li>Considerado:<h3><strong>{{ data.1|safe }}</li></strong></h3>
+                                            <!-- <li>Nivel de confianza:<h3><strong>{{ data.2|safe }}%</li></strong></h3>-->
+                                            <li>Autores:<h3><strong>{{ data.3|safe }}</li></strong></h3>
+                                            <li>Fecha de publicación:<h3><strong>{{ data.4|safe }}</li></strong></h3>
+                                            <li>Imagen principal:<img src={{ data.5|safe }} alt="Top Image"></li>
+                                            <li>Descripcion de la imagen:<h3><strong>{{ data.6|safe }}</li></strong></h3>
+                                            <li><h3><a href={{ data.7|safe }}><strong>Buscar la imagen en Google</a></h3></li></strong>
+                                            <li><h3>Citas:</h3>
+                                                <ul style="list-style-type:disc; padding-left:20%;text-align: left">
+                                                {% for qo in data.8 %}
+                                                    <li>{{'"'|add:qo|add:'"'|safe }}</li>
+                                                {% endfor %}
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                        {% endif %}
+                        {% if hit is False %}
+                                    <div id ="banner">
+                                        <ul style="list-style: none;">
+                                            <li><h3><strong>{{ errorHit|safe }}</li></strong></h3>
+                                            <li>Dominio:<h3><strong>{{ data.0|safe }}</li></strong></h3>
+                                            <li>Autores:<h3><strong>{{ data.1|safe }}</li></strong></h3>
+                                            <li>Fecha de publicación:<h3><strong>{{ data.2|safe }}</li></strong></h3>
+                                            <li>Imagen principal:<img src={{ data.3|safe }} alt="Top Image"></li>
+                                            <li>Descripcion de la imagen:<h3><strong>{{ data.4|safe }}</li></strong></h3>
+                                            <li><h3><a href={{ data.5|safe }}><strong>Buscar la imagen en Google</a></h3></li></strong>
+                                            <li><h3>Citas:</h3>
+                                                <ul style="list-style-type:disc; padding-left:20%;text-align: left">
+                                                {% for qo in data.6 %}
+                                                    <li><strong>{{  '"'|add:qo|add:'"'|safe  }}</li></strong>
+                                                {% endfor %}
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

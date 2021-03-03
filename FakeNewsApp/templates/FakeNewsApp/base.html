@@ -1,0 +1,117 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}FakeNews-LIIT{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Turret Road' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet"  href="{% static 'FakeNewsApp/style.css' %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+        <!-- Header -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'FakeNewsApp:index' %}">FakeNews-LIIT</a>
+        </div>
+
+        <!-- Items -->
+        <div class="collapse navbar-collapse" id="topNavBar">
+            
+            <ul class="nav navbar-nav">
+                {% if user.is_authenticated %}
+                <li>
+                    
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li>
+                        
+                    </li>
+                    <li>
+                            
+                        </li>
+                    <li>
+                        
+                    </li>
+                {% else %}
+                    <li>
+                        
+                    </li>
+                {% endif %}
+            </ul>
+            
+        </div>
+
+    </div>
+</nav>
+
+{% block body %}
+{% endblock %}
+
+    <div class="footer">
+        
+        <div class="panel panel-defualt">
+                <div class="panel-body" >
+                                    <!-- Footer -->
+                                    <footer class="page-footer font-small blue pt-4">
+
+                                            <!-- Footer Links -->
+                                        <div class="container-fluid text-center text-md-left">
+                                        
+                                            <!-- Grid row -->
+                                            <div class="row">
+                                        
+                                                <!-- Grid column -->
+                                                <div class="col-md-6 mt-md-0 mt-3">
+                                        
+                                                    <!-- Content -->
+                                                    <h5 class="text-uppercase">Fake News App - LIIT</h5>
+                                                    <p align="justify">Descripcion</p>
+                                        
+                                                </div>
+                                                <!-- Grid column -->
+                                                <div class="col-md-6 mb-md-0 mb-3">
+                                                        
+                                                        <h5 class="text-uppercase">Quick Links</h5>
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item" align="justify">
+                                                            <a href="https://investiga.uned.ac.cr/liit/">Laboratorio de Investigación e Innovavión Tecnológica - UNED COSTA RICA</a>
+                                                            </li>
+                                                            
+                                                        </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div class="footer-copyright text-center py-3">© 2020 Copyright:
+                                                <a href="https://investiga.uned.ac.cr/liit/"> investiga.uned.ac.cr/liit</a>
+                                            </div>
+                                    </footer>
+                                        <!-- Footer -->
+                </div>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+</html>
