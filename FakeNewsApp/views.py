@@ -9,6 +9,7 @@ from newspaper import Article
 from serpapi import GoogleSearchResults
 from bs4 import BeautifulSoup
 from django.utils.html import format_html
+from django.template.loader import render_to_string
 
 def indexView(request):
     
@@ -53,6 +54,9 @@ def indexView(request):
                         imgTextSearch = searchImgText(figCap)
 
                         quotes= getQuotes(article.text)
+
+                        graph_html= render_to_string('FakeNewsApp/graph1.html')
+                        nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit})
