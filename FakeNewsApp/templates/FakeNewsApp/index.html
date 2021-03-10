@@ -52,7 +52,14 @@
                                     <div id="banner">                        
                                         <h2><strong>Gráficos</strong></h2>
                                         {{graph_html|safe}}
-                                        {{nodeFreq_html|safe}}
+                                        <div>
+                                            <figure>
+                                                {{ nodeFreq_html|safe }}
+                                            </figure>
+                                        </div>
+                                        
+                                            
+                                        
 
                                     </div>
                         {% endif %}

@@ -57,8 +57,14 @@ def indexView(request):
 
                         quotes= getQuotes(article.text)
 
-                        graph_html= render_to_string('FakeNewsApp/graph1.html')
-                        nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
+                        graph_html, nodeFreq_html =graph(article.text)
+                        nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
+            
+
+                        #graph_html= render_to_string('FakeNewsApp/graph1.html')
+                        #nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
+
+                        
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
@@ -78,6 +84,14 @@ def indexView(request):
                         for a in article.authors:
                             authors += a + ", "
                         authors = authors[:-2]
+
+                        graph_html, nodeFreq_html =graph(article.text)
+
+                        #graph_html= render_to_string('FakeNewsApp/graph1.html')
+                        #nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
+
+                        
+
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas): "
                         return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
@@ -142,7 +156,7 @@ def searchVerbs(quotes):
 
 
 def graph(text):
-    gap = 3
+    gap = 2
     #Create Tokens from text:
     token_text = tkt(text, with_stopwords=False)
     source, target = token_text.get_source_target_graph(gap=gap)
@@ -150,4 +164,9 @@ def graph(text):
     #Create Graph:
     text_graph = tg(source, target)
     text_graph.plot_node_frequency(html=True)
-    text_graph.plot_node_metric(metric='pagerank', html=True)
+    #text_graph.plot_node_metric(metric='pagerank', html=True) Pendiente
+    text_graph.set_nx_layout(layout='spring')
+    # Pendiente implementar generacion del gephi
+    text_graph.draw_graph_metrics(html=True, metric='pagerank', with_labels=True, with_values=False)
+
+    return text_graph.graph_html_string, text_graph.nodeFreq_html_string
