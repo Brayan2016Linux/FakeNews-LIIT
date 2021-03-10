@@ -59,7 +59,7 @@ def indexView(request):
                         nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
-                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit})
+                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
                     else:
                         hit = False
                         article = Article(url_main)
@@ -78,7 +78,7 @@ def indexView(request):
                         authors = authors[:-2]
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas): "
-                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data})
+                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
                 else:
                     hit = False
                     errorHit="URL probablemente no valido"
