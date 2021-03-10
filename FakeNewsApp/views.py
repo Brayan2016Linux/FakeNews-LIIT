@@ -10,6 +10,8 @@ from serpapi import GoogleSearchResults
 from bs4 import BeautifulSoup
 from django.utils.html import format_html
 from django.template.loader import render_to_string
+from .tokenizer_text import tokenize_text as tkt
+from .data_graph import data_graph as tg
 
 def indexView(request):
     
@@ -137,3 +139,15 @@ def searchVerbs(quotes):
                
             
     return quotes0
+
+
+def graph(text):
+    gap = 3
+    #Create Tokens from text:
+    token_text = tkt(text, with_stopwords=False)
+    source, target = token_text.get_source_target_graph(gap=gap)
+    
+    #Create Graph:
+    text_graph = tg(source, target)
+    text_graph.plot_node_frequency(html=True)
+    text_graph.plot_node_metric(metric='pagerank', html=True)
