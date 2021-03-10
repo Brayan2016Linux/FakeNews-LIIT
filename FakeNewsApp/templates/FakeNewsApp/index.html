@@ -11,7 +11,7 @@
                         
                         <!-- Banner -->
                         <div id="banner">
-                            <h2 ><strong>Fake News App:</strong> 
+                            
                                 
                             <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
@@ -49,6 +49,12 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    <div id="banner">                        
+
+                                        {{graph_html|safe}}
+                                        {{nodeFreq_html|safe}}
+
+                                    </div>
                         {% endif %}
                         {% if hit is False %}
                                     <div id ="banner">
@@ -68,6 +74,12 @@
                                                 </ul>
                                             </li>
                                         </ul>
+                                    </div>
+                                    <div id="banner">                        
+
+                                        {{graph_html|safe}}
+                                        {{nodeFreq_html|safe}}
+
                                     </div>
                         {% endif %}
                 </div>
