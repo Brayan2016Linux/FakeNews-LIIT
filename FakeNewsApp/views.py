@@ -13,6 +13,7 @@ from django.template.loader import render_to_string
 from .tokenizer_text import tokenize_text as tkt
 from .data_graph import data_graph as tg
 
+
 def indexView(request):
     
     if(request.POST):
@@ -163,10 +164,10 @@ def graph(text):
     
     #Create Graph:
     text_graph = tg(source, target)
-    text_graph.plot_node_frequency(html=True)
+    text_graph.plot_node_frequency(save=False,html=True)
     #text_graph.plot_node_metric(metric='pagerank', html=True) Pendiente
     text_graph.set_nx_layout(layout='spring')
     # Pendiente implementar generacion del gephi
-    text_graph.draw_graph_metrics(html=True, metric='pagerank', with_labels=True, with_values=False)
+    text_graph.draw_graph_metrics(save=False,html=True, metric='pagerank', with_labels=True, with_values=False)
 
     return text_graph.graph_html_string, text_graph.nodeFreq_html_string

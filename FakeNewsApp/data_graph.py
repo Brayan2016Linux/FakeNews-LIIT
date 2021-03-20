@@ -199,7 +199,7 @@ class data_graph():
                 plt.savefig(f, format = "svg")
                 self.nodeFreq_html_string = f.getvalue()
                 #self.nodeFreq_html_string = mpld3.fig_to_html(plt.gcf())
-                mpld3.save_html(plt.gcf(), html_name)
+                #mpld3.save_html(plt.gcf(), html_name)
         else:
             plt.show()
 
@@ -1029,7 +1029,7 @@ class data_graph():
                 plt.savefig(save_as)
             if html:
                 self.graph_html_string = mpld3.fig_to_html(plt.gcf())
-                mpld3.save_html(plt.gcf(), html_name)
+                #mpld3.save_html(plt.gcf(), html_name)
         else:
             plt.show()
 
