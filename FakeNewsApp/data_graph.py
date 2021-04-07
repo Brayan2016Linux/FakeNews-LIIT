@@ -966,6 +966,8 @@ class data_graph():
         #save file:
         with open(output_name, 'w', encoding='utf-8') as file:
             file.write(gexf)
+            
+        return gexf #return text with gexf --> added 04/07/2021
 
 # =================================DRAW GRAPH ===============================================
 
@@ -1044,7 +1046,7 @@ class data_graph():
                         with_labels = False,
                         with_node_label = True,
                         with_values = False,
-                        first_n_values = 5,
+                        first_n_values = 'all',
                         node_size = 50,
                         normal_node_size = True,
                         cmap = 'YlOrRd',
@@ -1059,7 +1061,10 @@ class data_graph():
         labels = self.vertex_labels
         node_label = dict()
 
-        k = first_n_values
+        if first_n_values == 'all':  #add all labels --> 04/01/2021
+            k = len(self.g.nodes()) 
+        else:                       
+            k = first_n_values
         ordered_list_values = sorted([value for value in metrics.values()], reverse=True)[0:k]
     
         for key in metrics.keys():
