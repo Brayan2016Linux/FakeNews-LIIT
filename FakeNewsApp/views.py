@@ -68,7 +68,7 @@ def indexView(request):
                         
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
-                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
+                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html,'article_text':article.text})
                     else:
                         hit = False
                         article = Article(url_main)
@@ -87,6 +87,7 @@ def indexView(request):
                         authors = authors[:-2]
 
                         graph_html, nodeFreq_html =graph(article.text)
+                        nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
 
                         #graph_html= render_to_string('FakeNewsApp/graph1.html')
                         #nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
@@ -95,7 +96,7 @@ def indexView(request):
 
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas): "
-                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
+                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text})
                 else:
                     hit = False
                     errorHit="URL probablemente no valido"
@@ -133,27 +134,37 @@ def searchImgText(txt):
 def getQuotes(text):
     import re
     quotes = re.findall(r'"(.*?)"', text)
-    quotes+=re.findall(r'“(.*?)”', text)
+    quotes+= re.findall(r'“(.*?)”', text)
+    quotes+= re.findall('"([^"]*)"', text)
+    quotes+= re.findall('“([^"]*)”', text)
     
     return searchVerbs(quotes)
-
+    
 def searchVerbs(quotes):
     allVerbs = list(Verbo.objects.all())
     quotes0 = []
     
+    
     for q in quotes:
         replace = False
+        wlist = q.split(" ")
         for verb in allVerbs:
-            v = str(q).rfind(verb.radicalRegular)
-            if(v != -1):
-                q = q.replace(verb.radicalRegular,format_html('<strong><font size="+2">{}</font></strong>',verb.radicalRegular))
-                replace = True
+            for w in wlist:
+                v = str(w).rfind(verb.radicalRegular)
+                if(v != -1):
+                    wlist = list(map(lambda b: b.replace(w,format_html('<strong><font size="+2">{}</font></strong>',w)), wlist))
+
+                #q = q.replace(verb.radicalRegular,format_html('<strong><font size="+2">{}</font></strong>',verb.radicalRegular))
+                #replace = True
+        q = " ".join(wlist)
+
                 
          
         quotes0.append(q)
                
             
     return quotes0
+
 
 
 def graph(text):
