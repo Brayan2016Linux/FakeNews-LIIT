@@ -95,7 +95,7 @@ def indexView(request):
                         
 
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
-                        errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas): "
+                        errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
                         return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text})
                 else:
                     hit = False
@@ -137,6 +137,7 @@ def getQuotes(text):
     quotes+= re.findall(r'“(.*?)”', text)
     quotes+= re.findall('"([^"]*)"', text)
     quotes+= re.findall('“([^"]*)”', text)
+    quotes+= re.findall(r'«(.*?)»', text)
     
     return searchVerbs(quotes)
     
