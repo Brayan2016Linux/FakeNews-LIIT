@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'FakeNews.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME':  'FakeNewsApp-DB',
+        'NAME':  'db-fakenews',
     }
 }
 
