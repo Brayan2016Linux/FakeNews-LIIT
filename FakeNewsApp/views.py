@@ -135,8 +135,8 @@ def getQuotes(text):
     import re
     quotes = re.findall(r'"(.*?)"', text)
     quotes+= re.findall(r'“(.*?)”', text)
-    quotes+= re.findall('"([^"]*)"', text)
-    quotes+= re.findall('“([^"]*)”', text)
+    #quotes+= re.findall('"([^"]*)"', text)
+    #quotes+= re.findall('“([^"]*)”', text)
     quotes+= re.findall(r'«(.*?)»', text)
     
     return searchVerbs(quotes)
