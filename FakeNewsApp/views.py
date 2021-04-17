@@ -12,6 +12,9 @@ from django.utils.html import format_html
 from django.template.loader import render_to_string
 from .tokenizer_text import tokenize_text as tkt
 from .data_graph import data_graph as tg
+import whois
+
+
 
 
 def indexView(request):
@@ -54,21 +57,21 @@ def indexView(request):
 
                         figCap = getNyTimesImgDesc(url_main)
                         imgSearch = searchImg(article.top_image)
-                        imgTextSearch = searchImgText(figCap)
 
                         quotes= getQuotes(article.text)
 
                         graph_html, nodeFreq_html =graph(article.text)
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
             
-
-                        #graph_html= render_to_string('FakeNewsApp/graph1.html')
-                        #nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
-
+                        domain = "Texto del WHOIS !"
+                        #whois.query('google.com')
                         
+                
+
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
-                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html,'article_text':article.text})
+                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 
+                        'nodeFreq_html':nodeFreq_html,'article_text':article.text, 'dm_registrar': domain})
                     else:
                         hit = False
                         article = Article(url_main)
@@ -78,7 +81,6 @@ def indexView(request):
 
                         figCap = getNyTimesImgDesc(url_main)
                         imgSearch = searchImg(article.top_image)
-                        imgTextSearch = searchImgText(figCap)
 
                         quotes= getQuotes(article.text)
 
@@ -127,9 +129,6 @@ def searchImg(urlImg):
     url = "https://www.google.com/searchbyimage?hl=en-US&image_url="+urlImg
     return url
 
-def searchImgText(txt):
-    url = "https://www.google.com/search?q=" + txt
-    return url.replace("\n", "")
 
 def getQuotes(text):
     import re

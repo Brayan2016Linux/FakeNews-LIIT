@@ -135,3 +135,15 @@ input[type=text] {
     justify-content: flex-end;
 }
   
+
+#domain-button{
+    background-color: transparent;
+    border: none;
+    padding: 10px 24px;  
+    margin: 6%;
+    color: rgb(0, 0, 0);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+
+}
