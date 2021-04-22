@@ -29,6 +29,8 @@ import mpld3
 from datetime import date
 import itertools
 
+#Added 04/22/2021
+from wordcloud import WordCloud #Required install wordcloud
 
 __all__ = ['data_graph']
 
@@ -202,6 +204,42 @@ class data_graph():
                 #mpld3.save_html(plt.gcf(), html_name)
         else:
             plt.show()
+
+  # ================== WORDCLOUD =========================================================
+
+    #Added 04/22/2021
+    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, fig_size=[20,10], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
+        """Grafica la nube de palabras según los nodos descubiertos por la red.
+        """
+        import io
+
+        plt.close('all')
+        df = self.get_node_frequency_df()
+        df = df.sort_values('frequency',ascending=ascending).tail(tail_number)
+        text = " ".join(df['labels'].tolist())
+
+        wc = wordcloud.WordCloud(background_color=background_color, max_words=max_words, **kwargs)
+        wc.generate(text)
+
+        if mask_png is not None:
+            wc.to_file(mask_png)
+
+        plt.figure(figsize=fig_size)
+        plt.imshow(wc, interpolation=interpolation)
+
+        plt.axis("off")
+
+        if save or html:
+            if save:
+                plt.savefig(save_as)
+            if html:
+                f = io.BytesIO()
+                plt.savefig(f, format = "svg")
+                self.nodeFreq_html_string = f.getvalue()
+                #self.nodeFreq_html_string = mpld3.fig_to_html(plt.gcf())
+                #mpld3.save_html(plt.gcf(), html_name)
+        else:
+            plt.show()          
 
 
 # ================== ADJACENCY MATRIX ==================================================
