@@ -157,7 +157,7 @@ def searchVerbs(quotes):
 
 
 def graph(text):
-    gap = 2
+    gap = 1
     #Create Tokens from text:
     token_text = tkt(text, with_stopwords=False)
     source, target = token_text.get_source_target_graph(gap=gap)
