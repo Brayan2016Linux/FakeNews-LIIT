@@ -451,6 +451,13 @@ class data_graph():
         g = self.g
         self.metrics_dict['betweenness'] = nx.betweenness_centrality(g, normalized=normalized)
         return self.metrics_dict['betweenness']
+    
+    #V.0.0.4
+    def ug_betweenness(self, normalized=True):
+        """Devuelve un diccionario con el valor betweenness para cada nodo"""
+        g = self.g.to_undirected()
+        self.metrics_dict['undirected_graph_betweenness'] = nx.betweenness_centrality(g, normalized=normalized)
+        return self.metrics_dict['undirected_graph_betweenness']
 
 #STRUCTURAL HOLES:
     def constraint(self):
@@ -630,7 +637,7 @@ class data_graph():
                     dict_[i] = list_.index(k)
         return dict_
 
-    def dict_of_communities(self, algorithm='asyn_fluidc', k=4, **kwargs):
+    def dict_of_communities(self, algorithm='louvain', k=4, **kwargs):
         """Devuelve un diccionario con las comunidades calculadas según el algoritmo específico"""
         """Default = asyn_fluidc, recomendado en networkx"""
         g = self.g
@@ -689,7 +696,7 @@ class data_graph():
         if metrics == 'all':
             if g.is_directed():
                 metrics = ['degree', 'indegree', 'outdegree', 'eccentricity', 'pagerank', 
-                           'eigenvector', 'betweenness', 'harmonic', 'closeness',
+                           'eigenvector', 'betweenness','undirected_graph_betweenness', 'harmonic', 'closeness',
                            'communities', 'constraint', 'effective_size', 'local_transitivity',
                            'clustering', 'triangles', 'square_clustering']
             else:
@@ -719,6 +726,8 @@ class data_graph():
                     df['closeness'] = self.closeness_centrality().values()
                 if i == 'betweenness':
                     df['betweenness'] = self.betweenness().values()
+                if i == 'undirected_graph_betweenness': #Added 04/20/21
+                    df['undirected_graph_betweenness'] = self.ug_betweenness().values()
                 if i == 'constraint':
                     df['constraint'] = self.constraint().values()
                 if i == 'effective_size':
@@ -797,6 +806,8 @@ class data_graph():
                     metrics = self.pagerank(**kwargs)
                 elif metric == 'betweenness':
                     metrics = self.betweenness(**kwargs)
+                elif metric == 'undirected_graph_betweenness': #Added 04/20/21
+                    metrics = self.ug_betweenness(**kwargs) 
                 elif metric == 'eigenvector':
                     metrics = self.eigenvector_centrality()
                 elif metric == 'harmonic':
@@ -1075,7 +1086,7 @@ class data_graph():
                    node_label[key] = ''
 
         allowed = ['pagerank', 'betweenness', 'eigenvector', 'eccentricity', 'degree', 'indegree', 'outdegree', 'harmonic', 'closeness', 'triangles', 'constraint', 'effective_size', 'clustering',
-        'square_clustering', 'local_transitivity']
+        'square_clustering', 'local_transitivity', 'undirected_graph_betweenness']
                 
         if metric in allowed:
             if normal_node_size:
@@ -1090,7 +1101,7 @@ class data_graph():
                         save=True, 
                         html_name ='graph_communities.html', 
                         save_as='graph_communities.png', 
-                        community='asyn_fluidc', 
+                        community='louvain', 
                         with_labels = False,
                         with_node_label = True,
                         with_values = False,
