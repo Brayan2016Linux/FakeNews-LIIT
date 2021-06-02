@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 from .tokenizer_text import tokenize_text as tkt
 from .data_graph import data_graph as tg
 import whois
-from .domainCert import DomainCertification 
+from .domainCert import *
 
 
 
@@ -64,17 +64,14 @@ def indexView(request):
                         graph_html, nodeFreq_html =graph(article.text)
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
                         
-                        #domain = "TEXTO DE EJEMPLO\n\nDomain Name: STACKOVERFLOW.COM Registry Domain ID: 108907621_DOMAIN_COM-VRSN Registrar WHOIS Server: whois.name.com Registrar URL: http://www.name.com"
-                        domain = DomainCertification(url[2])
+                        hostinfo = get_certificate("teletica.com",443)
+                        domainInfo = print_basic_info(hostinfo)
                         #domain = get_whois_data(url[2])
                         #whois.query('google.com')
-                        
-                
-
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 
-                        'nodeFreq_html':nodeFreq_html,'article_text':article.text, 'dm_registrar': str(domain.result)})
+                        'nodeFreq_html':nodeFreq_html,'article_text':article.text, 'dm_registrar': domainInfo})
                     else:
                         hit = False
                         article = Article(url_main)
