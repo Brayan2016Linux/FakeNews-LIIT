@@ -61,11 +61,13 @@ def indexView(request):
 
                         quotes= getQuotes(article.text)
 
+                        hostinfo = get_certificate(url[2].replace("www.",""),443)
+                        domainInfo = print_basic_info(hostinfo)
+
                         graph_html, nodeFreq_html =graph(article.text)
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
                         
-                        hostinfo = get_certificate("teletica.com",443)
-                        domainInfo = print_basic_info(hostinfo)
+                        
                         #domain = get_whois_data(url[2])
                         #whois.query('google.com')
 
@@ -88,6 +90,9 @@ def indexView(request):
                             authors += a + ", "
                         authors = authors[:-2]
 
+                        hostinfo = get_certificate(url[2].replace("www.",""),443)
+                        domainInfo = print_basic_info(hostinfo)
+
                         graph_html, nodeFreq_html =graph(article.text)
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
 
@@ -98,7 +103,7 @@ def indexView(request):
 
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
-                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text})
+                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo})
                 else:
                     hit = False
                     errorHit="URL probablemente no valido"
