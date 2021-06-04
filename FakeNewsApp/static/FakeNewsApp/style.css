@@ -53,6 +53,12 @@ table tr:nth-child(odd) {
 /* Banner                                                                        */
 /*********************************************************************************/
 
+.navbar-brand{
+    text-align: center;
+    padding: 20%;
+
+}
+
 #banner {
     text-align: center;
     padding: 1.5em;

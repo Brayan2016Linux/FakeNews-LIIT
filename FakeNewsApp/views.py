@@ -16,7 +16,8 @@ import whois
 from .domainCert import *
 
 
-
+def scrapperView(request):
+    return render(request,"FakeNewsApp/scrapper.html")
 
 def indexView(request):
     
@@ -187,3 +188,6 @@ def graph(text):
     text_graph.draw_graph_metrics(save=False,html=True, metric='pagerank', with_labels=True, with_values=False)
 
     return text_graph.graph_html_string, text_graph.nodeFreq_html_string
+
+
+

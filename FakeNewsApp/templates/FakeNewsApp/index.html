@@ -99,66 +99,68 @@
                                     <div id ="banner">
                                         <ul style="list-style: none;">
                                             <li><h3><strong>{{ errorHit|safe }}</li></strong></h3>
-                                            
-                                            <li>
-                                                Dominio:
+                                            {%if errorHit != "URL probablemente no valido"%}
+                                                    <li>
+                                                        Dominio:
 
-                                                <!-- Button trigger modal -->
-                                                <button type="button" id="domain-button" class="btn btn-default" data-toggle="modal" data-target="#domainModal"><h3>{{ data.0|safe }}</h3>
-                                                </button>
-
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="domainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="exampleModalLabel">Información del certificado SSL del sitio</h3>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" id="domain-button" class="btn btn-default" data-toggle="modal" data-target="#domainModal"><h3>{{ data.0|safe }}</h3>
                                                         </button>
-                                                    </div>
-                                                    <div id="modalText" class="modal-body">
-                                                        {{ dm_registrar|safe }}
-                                                    </div>
-                                                    <div class="modal-footer">
 
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                </div> 
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="domainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h3 class="modal-title" id="exampleModalLabel">Información del certificado SSL del sitio</h3>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div id="modalText" class="modal-body">
+                                                                {{ dm_registrar|safe }}
+                                                            </div>
+                                                            <div class="modal-footer">
 
-                                                        
-                                            </li>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                        </div> 
 
-                                            <li>Autores:<h3><strong>{{ data.1|safe }}</li></strong></h3>
-                                            <li>Fecha de publicación:<h3><strong>{{ data.2|safe }}</li></strong></h3>
-                                            <li>Imagen principal:<img src={{ data.3|safe }} alt="Top Image"></li>
-                                            <li>Descripcion de la imagen:<h3><strong>{{ data.4|safe }}</li></strong></h3>
-                                            <li><h3><a href={{ data.5|safe }}><strong>Buscar la imagen en Google</a></h3></li></strong>
-                                            <li><h3>Citas:</h3>
-                                                <ul style="list-style-type:disc; padding-left:20%;text-align: left">
-                                                {% for qo in data.6 %}
-                                                    <li><strong>{{  '"'|add:qo|add:'"'|safe  }}</li></strong>
-                                                {% endfor %}
+                                                                
+                                                    </li>
+
+                                                    <li>Autores:<h3><strong>{{ data.1|safe }}</li></strong></h3>
+                                                    <li>Fecha de publicación:<h3><strong>{{ data.2|safe }}</li></strong></h3>
+                                                    <li>Imagen principal:<img src={{ data.3|safe }} alt="Top Image"></li>
+                                                    <li>Descripcion de la imagen:<h3><strong>{{ data.4|safe }}</li></strong></h3>
+                                                    <li><h3><a href={{ data.5|safe }}><strong>Buscar la imagen en Google</a></h3></li></strong>
+                                                    <li><h3>Citas:</h3>
+                                                        <ul style="list-style-type:disc; padding-left:20%;text-align: left">
+                                                        {% for qo in data.6 %}
+                                                            <li><strong>{{  '"'|add:qo|add:'"'|safe  }}</li></strong>
+                                                        {% endfor %}
+                                                        </ul>
+                                                    </li>
                                                 </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div id="banner">                        
-                                        <h2><strong>Gráficos</strong></h2>
-                                        {{graph_html|safe}}
-                                        <div>
-                                            <figure>
-                                                {{ nodeFreq_html|safe }}
-                                            </figure>
-                                        </div>
-                                        <div>
-                                            <h2><strong>Texto</strong></h2>
-                                            <h3 align="justify">{{ article_text|safe }}</h3>
+                                                </div>
+                                                <div id="banner">                        
+                                                    <h2><strong>Gráficos</strong></h2>
+                                                    {{graph_html|safe}}
+                                                    <div>
+                                                        <figure>
+                                                            {{ nodeFreq_html|safe }}
+                                                        </figure>
+                                                    </div>
+                                                    <div>
+                                                        <h2><strong>Texto</strong></h2>
+                                                        <h3 align="justify">{{ article_text|safe }}</h3>
 
-                                        </div>
+                                                    </div>
+                                            {%endif%}        
+                                        <ul/>            
                                     </div>
-                                    
+                                            
                                         
                         {% endif %}
                 </div>
