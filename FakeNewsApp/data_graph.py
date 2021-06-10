@@ -218,7 +218,7 @@ class data_graph():
         df = df.sort_values('frequency',ascending=ascending).tail(tail_number)
         text = " ".join(df['labels'].tolist())
 
-        wc = wordcloud.WordCloud(background_color=background_color, max_words=max_words, **kwargs)
+        wc = WordCloud(background_color=background_color, max_words=max_words, **kwargs)
         wc.generate(text)
 
         if mask_png is not None:
