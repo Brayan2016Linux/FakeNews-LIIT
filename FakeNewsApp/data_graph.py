@@ -29,6 +29,8 @@ import mpld3
 from datetime import date
 import itertools
 
+#Added 04/22/2021
+from wordcloud import WordCloud #Required install wordcloud
 
 __all__ = ['data_graph']
 
@@ -202,6 +204,42 @@ class data_graph():
                 #mpld3.save_html(plt.gcf(), html_name)
         else:
             plt.show()
+
+  # ================== WORDCLOUD =========================================================
+
+    #Added 04/22/2021
+    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, fig_size=[20,10], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
+        """Grafica la nube de palabras según los nodos descubiertos por la red.
+        """
+        import io
+
+        plt.close('all')
+        df = self.get_node_frequency_df()
+        df = df.sort_values('frequency',ascending=ascending).tail(tail_number)
+        text = " ".join(df['labels'].tolist())
+
+        wc = wordcloud.WordCloud(background_color=background_color, max_words=max_words, **kwargs)
+        wc.generate(text)
+
+        if mask_png is not None:
+            wc.to_file(mask_png)
+
+        plt.figure(figsize=fig_size)
+        plt.imshow(wc, interpolation=interpolation)
+
+        plt.axis("off")
+
+        if save or html:
+            if save:
+                plt.savefig(save_as)
+            if html:
+                f = io.BytesIO()
+                plt.savefig(f, format = "svg")
+                self.nodeFreq_html_string = f.getvalue()
+                #self.nodeFreq_html_string = mpld3.fig_to_html(plt.gcf())
+                #mpld3.save_html(plt.gcf(), html_name)
+        else:
+            plt.show()          
 
 
 # ================== ADJACENCY MATRIX ==================================================
@@ -451,6 +489,13 @@ class data_graph():
         g = self.g
         self.metrics_dict['betweenness'] = nx.betweenness_centrality(g, normalized=normalized)
         return self.metrics_dict['betweenness']
+    
+    #V.0.0.4
+    def ug_betweenness(self, normalized=True):
+        """Devuelve un diccionario con el valor betweenness para cada nodo"""
+        g = self.g.to_undirected()
+        self.metrics_dict['undirected_graph_betweenness'] = nx.betweenness_centrality(g, normalized=normalized)
+        return self.metrics_dict['undirected_graph_betweenness']
 
 #STRUCTURAL HOLES:
     def constraint(self):
@@ -630,7 +675,7 @@ class data_graph():
                     dict_[i] = list_.index(k)
         return dict_
 
-    def dict_of_communities(self, algorithm='asyn_fluidc', k=4, **kwargs):
+    def dict_of_communities(self, algorithm='louvain', k=4, **kwargs):
         """Devuelve un diccionario con las comunidades calculadas según el algoritmo específico"""
         """Default = asyn_fluidc, recomendado en networkx"""
         g = self.g
@@ -689,7 +734,7 @@ class data_graph():
         if metrics == 'all':
             if g.is_directed():
                 metrics = ['degree', 'indegree', 'outdegree', 'eccentricity', 'pagerank', 
-                           'eigenvector', 'betweenness', 'harmonic', 'closeness',
+                           'eigenvector', 'betweenness','undirected_graph_betweenness', 'harmonic', 'closeness',
                            'communities', 'constraint', 'effective_size', 'local_transitivity',
                            'clustering', 'triangles', 'square_clustering']
             else:
@@ -719,6 +764,8 @@ class data_graph():
                     df['closeness'] = self.closeness_centrality().values()
                 if i == 'betweenness':
                     df['betweenness'] = self.betweenness().values()
+                if i == 'undirected_graph_betweenness': #Added 04/20/21
+                    df['undirected_graph_betweenness'] = self.ug_betweenness().values()
                 if i == 'constraint':
                     df['constraint'] = self.constraint().values()
                 if i == 'effective_size':
@@ -797,6 +844,8 @@ class data_graph():
                     metrics = self.pagerank(**kwargs)
                 elif metric == 'betweenness':
                     metrics = self.betweenness(**kwargs)
+                elif metric == 'undirected_graph_betweenness': #Added 04/20/21
+                    metrics = self.ug_betweenness(**kwargs) 
                 elif metric == 'eigenvector':
                     metrics = self.eigenvector_centrality()
                 elif metric == 'harmonic':
@@ -1044,7 +1093,7 @@ class data_graph():
                         with_labels = False,
                         with_node_label = True,
                         with_values = False,
-                        first_n_values = 5,
+                        first_n_values = 'all',
                         node_size = 50,
                         normal_node_size = True,
                         cmap = 'YlOrRd',
@@ -1059,7 +1108,10 @@ class data_graph():
         labels = self.vertex_labels
         node_label = dict()
 
-        k = first_n_values
+        if first_n_values == 'all':  #add all labels --> 04/01/2021
+            k = len(self.g.nodes())
+        else: 
+            k = first_n_values
         ordered_list_values = sorted([value for value in metrics.values()], reverse=True)[0:k]
     
         for key in metrics.keys():
@@ -1075,7 +1127,7 @@ class data_graph():
                    node_label[key] = ''
 
         allowed = ['pagerank', 'betweenness', 'eigenvector', 'eccentricity', 'degree', 'indegree', 'outdegree', 'harmonic', 'closeness', 'triangles', 'constraint', 'effective_size', 'clustering',
-        'square_clustering', 'local_transitivity']
+        'square_clustering', 'local_transitivity', 'undirected_graph_betweenness']
                 
         if metric in allowed:
             if normal_node_size:
@@ -1090,7 +1142,7 @@ class data_graph():
                         save=True, 
                         html_name ='graph_communities.html', 
                         save_as='graph_communities.png', 
-                        community='asyn_fluidc', 
+                        community='louvain', 
                         with_labels = False,
                         with_node_label = True,
                         with_values = False,
