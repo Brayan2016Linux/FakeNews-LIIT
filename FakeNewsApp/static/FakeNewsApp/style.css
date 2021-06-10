@@ -17,12 +17,12 @@ body{
     color: #333447;
 }
 
-.navbar-brand{
+.navbar-button{
     font-family: Lato,Helvetica,sans-serif;
     color: #333447;
     border: 0.15em solid #9d9d9d;
     border-radius: 25px;
-    margin: 10px 0px;
+    margin: 15px 30px;
     height: 55px;
 }
 table, th, td {
@@ -53,11 +53,7 @@ table tr:nth-child(odd) {
 /* Banner                                                                        */
 /*********************************************************************************/
 
-.navbar-brand{
-    text-align: center;
-    padding: 20%;
 
-}
 
 #banner {
     text-align: center;
@@ -129,6 +125,17 @@ input[type=text] {
     border: none;
     border-bottom: 2px solid rgb(0, 0, 0);
   }
+
+.scrapper-list{
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.toScrapBnt {
+    margin: 81px;
+}
 
   footer {
     background: linear-gradient(90deg,#0583bf,#669f9b 50%,#829983);

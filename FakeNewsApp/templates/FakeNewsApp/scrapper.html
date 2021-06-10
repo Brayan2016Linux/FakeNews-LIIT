@@ -1,45 +1,26 @@
 {% extends 'FakeNewsApp/base.html' %}
 
-{% block title %}Reporte de articulos{% endblock %}
+{% block title %}Scrapper{% endblock %}
 
 {% block body %}
 <div class="row">
     <div class="col-sm-15 col-md-15">
         <div class="panel panel-defualt">
             <div class="panel-body">
-                
-                {% if object_list %}
-    
-                    <table style="width:100%">
-                    <caption>Articulos de noticia: {{ object_list|length }}</caption>
-                    <tr>
-                        <th>Titulo</th>
-                        <th>Nombre del sitio</th>
-                        <th>Fecha</th>
-                        <th>URL</th>
-                    </tr>
-                    {% for a in object_list %}
-                    <tr> 
-                        <td><a href="{% url 'Scrapper:details' a.id %}">{{ a.title }}</a></td>
-                        <td>{{ a.site_name }}</td>
-                        <td>{{ a.published_date }}</td>
-                        {% if a.url != None %}
-                        <td><a href="{{ a.url }}">{{ a.url }}</a></td>
-                        {% else %}
-                        <td>{{ a.url }}</td>
-                        {% endif %}
-
-                    </tr>
-                    {% endfor %}
-                    </table>
-
-                    
-
-                {% else %}
-                    <p>No hay registros</p>
-                {% endif %} 
-                
-            
+                <div class="scrapper-list">
+                    <div class="col-sm-offset-1 col-sm-10">
+                        <button type="submit" class="btn btn-info">www.teletica.com</button>
+                        <button type="submit" class="btn btn-info">www.nacion.com</button>
+                        <button type="submit" class="btn btn-info">www.nacion.com</button>
+                        <button type="submit" class="btn btn-info">www.ameliarueda.com</button>
+                        <button type="submit" class="btn btn-info">www.elmundo.cr</button>
+                        <button type="submit" class="btn btn-info">www.crhoy.com</button>
+                        <button type="submit" class="btn btn-info">www.repretel.com</button>
+                        <button type="submit" class="btn btn-info">www.larepublica.net</button>
+                        <button type="submit" class="btn btn-success">Todos los sitios</button>
+                    </div>
+                </div>
+             
             </div>
         </div>
     </div>
