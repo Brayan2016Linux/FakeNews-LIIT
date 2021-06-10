@@ -24,10 +24,8 @@ class Verbo(models.Model):
 
     verbo= models.TextField()
     radicalRegular= models.TextField(null=True, blank=True)
-    radicalIrrecular_0= models.TextField(null=True, blank=True)
-    radicalIrrecular_1= models.TextField(null=True, blank=True)
-
-
+    radicalIrregular_0= models.TextField(null=True, blank=True)
+    radicalIrregular_1= models.TextField(null=True, blank=True)
 
     def publish(self):
         self.save()

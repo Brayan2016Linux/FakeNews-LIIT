@@ -49,7 +49,7 @@ ABBREVIATIONS = ['etc', 'sr', 'sres', 'sras', 'srta']
 ENCLITIC_PRONOUNS = ['me', 'se', 'te', 'nos', 'le', 'la', 'lo', 'los', 'las']
 PUNCTUATION_SIGN = [i for i in string.punctuation]
 CURRENCIES_SYMB = ['$', '€', '¢', '¥']
-OTHERS_SYMB = ['...', "\"", "`", "''", "``", "¿", "?", "º", "¡", "“", "*", "-","_", "”", "\'" ]
+OTHERS_SYMB = ['...', "\"", "`", "''", "``", "¿", "?", "º", "¡", "“", "*", "-","_", "”", "©", "\'", "\'s" ]
 NOUNS_ES_FINISHED_IN_S = ['pais', 'virus', 'dios', 'coronavirus', 'viernes']
 NOUNS_ES_FINISHED_IN_R = ['mar', 'par']
 NOUNS_ES_FINISHED_IN_RIA = ['historia', 'histeria', 'alegria']
@@ -60,7 +60,8 @@ NAMES=['figueres', 'chavarria', 'chaves', 'cespedes', 'maria', 'jose', 'carlos',
 
 class tokenize_text():
     def __init__(self, text, language ='spanish', with_stopwords=False):
-        self.language = language
+        #self.language = language
+        self.language = self.language_detector(text) #Added 04/21/2021
         self.stemmer = self.stemmer()
         self.text = text.rstrip('\n') #Elimina saltos de carro
         self.text = self.remove_emoji(self.text) #Elimina emojis
@@ -266,6 +267,23 @@ class tokenize_text():
                 pos_list.append(pos)
                 lm_list.append(self.normalize(word_lemma))
         return tk_list, pos_list, lm_list
+      
+      
+    #Added 04/21/2021 Language Detector
+    def language_detector(self, text):
+        languages = languages = ["spanish","english","dutch","finnish","german","italian",
+                                    "portuguese","turkish","danish","french","hungarian",
+                                    "norwegian","russian","swedish"]
+        tokens = nltk.tokenize.word_tokenize(text)
+        tokens = [t.strip().lower() for t in tokens]
+        lang_count = {}
+        for lang in languages:
+           stop_words = str(nltk.corpus.stopwords.words(lang))
+           lang_count[lang] = 0
+           for word in tokens:
+              if word in stop_words:
+                  lang_count[lang] += 1
+        return max(lang_count, key=lang_count.get)
 
 if __name__=='__main__':
     print("Tokenizer")

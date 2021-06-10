@@ -12,7 +12,12 @@ from django.utils.html import format_html
 from django.template.loader import render_to_string
 from .tokenizer_text import tokenize_text as tkt
 from .data_graph import data_graph as tg
+import whois
+from .domainCert import *
 
+
+def scrapperView(request):
+    return render(request,"FakeNewsApp/scrapper.html")
 
 def indexView(request):
     
@@ -54,21 +59,22 @@ def indexView(request):
 
                         figCap = getNyTimesImgDesc(url_main)
                         imgSearch = searchImg(article.top_image)
-                        imgTextSearch = searchImgText(figCap)
 
                         quotes= getQuotes(article.text)
 
+                        hostinfo = get_certificate(url[2].replace("www.",""),443)
+                        domainInfo = print_basic_info(hostinfo)
+
                         graph_html, nodeFreq_html =graph(article.text)
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
-            
-
-                        #graph_html= render_to_string('FakeNewsApp/graph1.html')
-                        #nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
-
                         
+                        
+                        #domain = get_whois_data(url[2])
+                        #whois.query('google.com')
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
-                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
+                        return render(request,"FakeNewsApp/index.html",{'data':data, 'hit':hit, 'graph_html':graph_html, 
+                        'nodeFreq_html':nodeFreq_html,'article_text':article.text, 'dm_registrar': domainInfo})
                     else:
                         hit = False
                         article = Article(url_main)
@@ -78,7 +84,6 @@ def indexView(request):
 
                         figCap = getNyTimesImgDesc(url_main)
                         imgSearch = searchImg(article.top_image)
-                        imgTextSearch = searchImgText(figCap)
 
                         quotes= getQuotes(article.text)
 
@@ -86,7 +91,11 @@ def indexView(request):
                             authors += a + ", "
                         authors = authors[:-2]
 
+                        hostinfo = get_certificate(url[2].replace("www.",""),443)
+                        domainInfo = print_basic_info(hostinfo)
+
                         graph_html, nodeFreq_html =graph(article.text)
+                        nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
 
                         #graph_html= render_to_string('FakeNewsApp/graph1.html')
                         #nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
@@ -94,8 +103,8 @@ def indexView(request):
                         
 
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
-                        errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas): "
-                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html})
+                        errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
+                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo})
                 else:
                     hit = False
                     errorHit="URL probablemente no valido"
@@ -126,28 +135,35 @@ def searchImg(urlImg):
     url = "https://www.google.com/searchbyimage?hl=en-US&image_url="+urlImg
     return url
 
-def searchImgText(txt):
-    url = "https://www.google.com/search?q=" + txt
-    return url.replace("\n", "")
 
 def getQuotes(text):
     import re
     quotes = re.findall(r'"(.*?)"', text)
-    quotes+=re.findall(r'“(.*?)”', text)
+    quotes+= re.findall(r'“(.*?)”', text)
+    #quotes+= re.findall('"([^"]*)"', text)
+    #quotes+= re.findall('“([^"]*)”', text)
+    quotes+= re.findall(r'«(.*?)»', text)
     
     return searchVerbs(quotes)
-
+    
 def searchVerbs(quotes):
     allVerbs = list(Verbo.objects.all())
     quotes0 = []
     
+    
     for q in quotes:
         replace = False
+        wlist = q.split(" ")
         for verb in allVerbs:
-            v = str(q).rfind(verb.radicalRegular)
-            if(v != -1):
-                q = q.replace(verb.radicalRegular,format_html('<strong><font size="+2">{}</font></strong>',verb.radicalRegular))
-                replace = True
+            for w in wlist:
+                v = str(w).rfind(verb.radicalRegular)
+                if(v != -1):
+                    wlist = list(map(lambda b: b.replace(w,format_html('<strong><font size="+2">{}</font></strong>',w)), wlist))
+
+                #q = q.replace(verb.radicalRegular,format_html('<strong><font size="+2">{}</font></strong>',verb.radicalRegular))
+                #replace = True
+        q = " ".join(wlist)
+
                 
          
         quotes0.append(q)
@@ -156,8 +172,9 @@ def searchVerbs(quotes):
     return quotes0
 
 
+
 def graph(text):
-    gap = 2
+    gap = 1
     #Create Tokens from text:
     token_text = tkt(text, with_stopwords=False)
     source, target = token_text.get_source_target_graph(gap=gap)
@@ -168,6 +185,9 @@ def graph(text):
     #text_graph.plot_node_metric(metric='pagerank', html=True) Pendiente
     text_graph.set_nx_layout(layout='spring')
     # Pendiente implementar generacion del gephi
-    text_graph.draw_graph_metrics(save=False,html=True, metric='pagerank', with_labels=True, with_values=False)
+    text_graph.draw_graph_metrics(save=False,html=True, metric='pagerank', with_labels=True, with_values=False, font_size=4)
 
     return text_graph.graph_html_string, text_graph.nodeFreq_html_string
+
+
+
