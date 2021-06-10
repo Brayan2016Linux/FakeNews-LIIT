@@ -25,4 +25,5 @@ app_name='FakeNewsApp'
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
      path('fakenews/', include('FakeNewsApp.urls')),
+     path('fakenews/scrapper', include('FakeNewsApp.urls')),
 ]

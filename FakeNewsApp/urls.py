@@ -8,4 +8,5 @@ from django.contrib.auth.views import LoginView, LogoutView
 app_name='FakeNewsApp'
 urlpatterns = [
    path('', views.indexView, name='index'),
+   path('scrapper/', views.scrapperView, name='scrapper'),
 ]
