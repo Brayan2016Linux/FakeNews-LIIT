@@ -208,7 +208,7 @@ class data_graph():
   # ================== WORDCLOUD =========================================================
 
     #Added 04/22/2021
-    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, fig_size=[20,10], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
+    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, width=600, height=500, fig_size=[70,75], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
         """Grafica la nube de palabras según los nodos descubiertos por la red.
         """
         import io
@@ -218,7 +218,7 @@ class data_graph():
         df = df.sort_values('frequency',ascending=ascending).tail(tail_number)
         text = " ".join(df['labels'].tolist())
 
-        wc = WordCloud(background_color=background_color, max_words=max_words, **kwargs)
+        wc = wordcloud.WordCloud(width=width, height=height, background_color=background_color, max_words=max_words, **kwargs)
         wc.generate(text)
 
         if mask_png is not None:
@@ -1061,7 +1061,7 @@ class data_graph():
         self.pos = layout
 
     #-----DRAW GRAPH:
-    def draw_graph(self, g = None, html=False, save=False, html_name ='graph1.html', save_as='graph1.png', **kwargs):
+    def draw_graph(self, g = None, html=False, save=False, html_name ='graph1.html', save_as='graph1.png', font_size=6, **kwargs):
         """Dibuja el grafo utilizando las propiedades de networkx, puede salvar a .png o a .html"""
         plt.close('all')
         if g == None:
@@ -1072,7 +1072,7 @@ class data_graph():
             pos = self.set_nx_layout(layout='spring')
         else:
             pos = self.pos
-        nx.draw(g, pos, **kwargs)
+        nx.draw(g, pos, font_size=font_size, **kwargs)
         plt.draw()
         plt.axis('off')
         if save or html:
@@ -1098,6 +1098,7 @@ class data_graph():
                         first_n_values = 'all',
                         node_size = 50,
                         normal_node_size = True,
+                        font_size=6,
                         cmap = 'YlOrRd',
                         **kwargs):
 
@@ -1134,9 +1135,9 @@ class data_graph():
                 
         if metric in allowed:
             if normal_node_size:
-                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), **kwargs)
+                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), font_size=font_size, **kwargs)
             else:
-                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size=[v * size_factor for v in metrics.values()], labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), **kwargs)
+                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size=[v * size_factor for v in metrics.values()], labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), font_size=font_size, **kwargs)
 
 
     #-----DRAW GRAPH WITH COMMUNITIES:
@@ -1150,6 +1151,7 @@ class data_graph():
                         with_node_label = True,
                         with_values = False,
                         node_size = 50,
+                        font_size = 6,
                         cmap = 'YlOrRd',
                         **kwargs):
 
@@ -1169,7 +1171,7 @@ class data_graph():
 
         print("Number of communities %s detected: %d"%(community, len(list(set(commu_.values())))))
 
-        self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in commu_.values()], cmap=plt.get_cmap(cmap), **kwargs)
+        self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in commu_.values()], cmap=plt.get_cmap(cmap), font_size=6, **kwargs)
 
 if __name__ == '__main__':
     print("Module create_graph")
