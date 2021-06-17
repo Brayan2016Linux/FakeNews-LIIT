@@ -1065,7 +1065,7 @@ class data_graph():
         self.pos = layout
 
     #-----DRAW GRAPH:
-    def draw_graph(self, g = None, html=False, save=False, html_name ='graph1.html', save_as='graph1.png', **kwargs):
+    def draw_graph(self, g = None, html=False, save=False, html_name ='graph1.html', save_as='graph1.png', font_size=6, **kwargs):
         """Dibuja el grafo utilizando las propiedades de networkx, puede salvar a .png o a .html"""
         plt.close('all')
         if g == None:
@@ -1076,7 +1076,7 @@ class data_graph():
             pos = self.set_nx_layout(layout='spring')
         else:
             pos = self.pos
-        nx.draw(g, pos, **kwargs)
+        nx.draw(g, pos, font_size=font_size, **kwargs)
         plt.draw()
         plt.axis('off')
         if save or html:
@@ -1102,6 +1102,7 @@ class data_graph():
                         first_n_values = 'all',
                         node_size = 50,
                         normal_node_size = True,
+                        font_size=6,
                         cmap = 'YlOrRd',
                         **kwargs):
 
@@ -1138,9 +1139,9 @@ class data_graph():
                 
         if metric in allowed:
             if normal_node_size:
-                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), **kwargs)
+                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), font_size=font_size, **kwargs)
             else:
-                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size=[v * size_factor for v in metrics.values()], labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), **kwargs)
+                self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, nodelist=[i for i in metrics.keys()], node_size=[v * size_factor for v in metrics.values()], labels=node_label, with_labels=with_labels, node_color=[i for i in metrics.values()], cmap=plt.get_cmap(cmap), font_size=font_size, **kwargs)
 
 
     #-----DRAW GRAPH WITH COMMUNITIES:
@@ -1154,6 +1155,7 @@ class data_graph():
                         with_node_label = True,
                         with_values = False,
                         node_size = 50,
+                        font_size = 6,
                         cmap = 'YlOrRd',
                         **kwargs):
 
@@ -1173,7 +1175,7 @@ class data_graph():
 
         print("Number of communities %s detected: %d"%(community, len(list(set(commu_.values())))))
 
-        self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in commu_.values()], cmap=plt.get_cmap(cmap), **kwargs)
+        self.draw_graph(g=g, html=html, save=save, html_name=html_name, save_as=save_as, node_size = node_size,labels=node_label, with_labels=with_labels, node_color=[i for i in commu_.values()], cmap=plt.get_cmap(cmap), font_size=6, **kwargs)
 
 if __name__ == '__main__':
     print("Module create_graph")
