@@ -207,8 +207,8 @@ class data_graph():
 
   # ================== WORDCLOUD =========================================================
 
-    #Added 04/22/2021
-    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, fig_size=[20,10], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
+    #Added 04/22/2021 modified: 06/14/2021
+    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, width=600, height=500, fig_size=[70,75], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
         """Grafica la nube de palabras según los nodos descubiertos por la red.
         """
         import io
@@ -218,7 +218,7 @@ class data_graph():
         df = df.sort_values('frequency',ascending=ascending).tail(tail_number)
         text = " ".join(df['labels'].tolist())
 
-        wc = WordCloud(background_color=background_color, max_words=max_words, **kwargs)
+        wc = WordCloud(width=width, height=height, background_color=background_color, max_words=max_words, **kwargs)
         wc.generate(text)
 
         if mask_png is not None:
@@ -1016,6 +1016,10 @@ class data_graph():
         with open(output_name, 'w', encoding='utf-8') as file:
             file.write(gexf)
             
+        import io  #return text with gexf as file --> added 06/10/2021
+        f = io.StringIO(gexf)
+        gexf = f.getvalue()
+
         return gexf #return text with gexf --> added 04/07/2021
 
 # =================================DRAW GRAPH ===============================================
@@ -1050,7 +1054,7 @@ class data_graph():
 
     def rescale_nx_pos(self):
         """Devuelve una nueva escala para las coordenadas de los nodos en el dibujo del grafo"""
-        self.pos = nx.rescale_layout(g, pos = self.pos)
+        self.pos = nx.rescale_layout(self.g, pos = self.pos)
 
     def get_graph_pos(self):
         """Devuelve las coordenadas en el dibujo de cada uno de los nodos del grafo"""
