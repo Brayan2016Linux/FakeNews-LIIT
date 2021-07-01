@@ -1,8 +1,8 @@
-import Herramientas
+from .Herramientas import *
+from .Articulo import Articulo
 import requests
 from bs4 import BeautifulSoup
 from xml.etree.ElementTree import Element, SubElement, Comment
-from Articulo import Articulo
 import json
 
 class Teletica:
@@ -10,10 +10,14 @@ class Teletica:
     links = []
     articulos = [] #nuevo
 
+    def __init__(self):
+            self.site_name="teletica.com"
+            self.links=[]
+            self.articulos=[]
+
     def scrap(self):
         
         
-
         try:
             
             enlace = "https://teletica.com/"
@@ -40,7 +44,7 @@ class Teletica:
                 title = ""  #nuevo
                 try:
 
-                    info1 = Herramientas.get_simple(link)
+                    info1 = get_simple(link)
                     sou = BeautifulSoup(info1, 'html.parser')
 
                     #date = sou.find('a', attrs={'class': 'date'})
@@ -75,7 +79,7 @@ class Teletica:
 def getUltimas(ul):
     url="https://teletica.com/widget/GetLastNews?categoryId=1&from=0&to=5&authorId=0"
     urls = []
-    r = Herramientas.get_especial(url)
+    r = get_especial(url)
     j = json.loads(r)
     for x in range (0,5) :
         try:
@@ -88,7 +92,7 @@ def getUltimas(ul):
 def getMasLeidas(ul):
     url = "https://teletica.com/Widget/GetMostRead"
     urls = []
-    r = Herramientas.get_especial(url)
+    r = get_especial(url)
     j = json.loads(r)
     for x in range (0,5) :
         try:
@@ -101,7 +105,7 @@ def getMasLeidas(ul):
 def getNoticias(ul):
     url = "https://teletica.com/asset/getMore/?slug=noticias&from=0&to=9"
     urls = []
-    r = Herramientas.get_especial(url)
+    r = get_especial(url)
     j = json.loads(r)
     j= json.loads(j)
     for x in range (0,9) :
@@ -117,7 +121,7 @@ def getNoticias(ul):
 def getDeportes(ul):
     url = "https://teletica.com/asset/getMore/?slug=deportes&from=0&to=5"
     urls = []
-    r = Herramientas.get_especial(url)
+    r = get_especial(url)
     j = json.loads(r)
     j= json.loads(j)
     for x in range (0,5) :
@@ -131,7 +135,7 @@ def getDeportes(ul):
 def getEntretenimiento(ul):
     url = "https://teletica.com/asset/getMore/?slug=entretenimiento&from=0&to=5"
     urls = []
-    r = Herramientas.get_especial(url)
+    r = get_especial(url)
     j = json.loads(r)
     j= json.loads(j)
     for x in range (0,5) :
@@ -145,7 +149,7 @@ def getEntretenimiento(ul):
 def getEstilo(ul):
     url = "https://teletica.com/asset/getMore/?slug=estilo-de-vida&from=0&to=5"
     urls = []
-    r = Herramientas.get_especial(url)
+    r = get_especial(url)
     j = json.loads(r)
     j= json.loads(j)
     for x in range (0,5) :

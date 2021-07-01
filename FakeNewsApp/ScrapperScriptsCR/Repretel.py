@@ -1,7 +1,7 @@
-import Herramientas
+from .Herramientas import *
+from .Articulo import Articulo
 from bs4 import BeautifulSoup
 from xml.etree.ElementTree import Element, SubElement, Comment
-from Articulo import Articulo
 import requests #Nuevo
 
 

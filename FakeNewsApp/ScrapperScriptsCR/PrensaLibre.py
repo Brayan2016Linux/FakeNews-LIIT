@@ -1,8 +1,8 @@
-import Herramientas
+from .Herramientas import *
+from .Articulo import Articulo
 import requests
 from bs4 import BeautifulSoup
 from xml.etree.ElementTree import Element, SubElement, Comment
-from Articulo import Articulo
 
 class PrensaLibre:
     site_name="laprensalibre.com"

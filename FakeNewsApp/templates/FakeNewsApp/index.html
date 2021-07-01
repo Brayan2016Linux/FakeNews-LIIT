@@ -12,16 +12,14 @@
                         <!-- Banner -->
                         <div id="banner">
                             
-                               <h2 > 
-                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
+                               
+                            <h2 ><form class="form-horizontal" method="get" action="{% url 'FakeNewsApp:indexView' %}">
                                 
                                 <div class="form-group">
                                 <label class="control-label col-sm-5">Ingrese el enlace a la noticia: </label>
-                                <input id="url" type="text" name="url"class="control-input col-sm-5">
-                                
+                                <input id="url" type="text" name="url" class="control-input col-sm-5">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-success">Analizar</button>
+                                        <button type="submit" class="btn btn-success" value="search" name="analizar-btn">Analizar</button>
                                     </div>
                                 </div>
                             </form> </h2 >

@@ -1,14 +1,14 @@
-from CRHoy import CRHoy
-from DiarioExtra import DiarioExtra
-from Monumental import Monumental
-from Nacion import Nacion
-from Repretel import Repretel
-from PrensaLibre import PrensaLibre
-from Seminario import Seminario
-from ElFinanciero import ElFinanciero
-from AmeliaRueda import AmeliaRueda
-from Teletica import Teletica
-import Herramientas
+from .CRHoy import CRHoy
+from .DiarioExtra import DiarioExtra
+from .Monumental import Monumental
+from .Nacion import Nacion
+from .Repretel import Repretel
+from .PrensaLibre import PrensaLibre
+from .Seminario import Seminario
+from .ElFinanciero import ElFinanciero
+from .AmeliaRueda import AmeliaRueda
+from .Teletica import Teletica
+from .Herramientas import *
 
 
 def scrapAll():
@@ -32,7 +32,7 @@ def scrapCRHoy():
     crHoy.scrap()
     for c in crHoy.articulos:
         c.printTitle()
-    return len(crHoy.articulos)
+    return crHoy.articulos
 
 def scrapDiarioExtra():
     diarioExtra = DiarioExtra()
@@ -95,6 +95,7 @@ def scrapTeletica():
     teletica.scrap()
     for n in teletica.articulos:
         n.printTitle()
-    return len(teletica.articulos)
+    return teletica.articulos
+    
 
 

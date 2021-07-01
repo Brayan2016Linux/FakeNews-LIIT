@@ -1,5 +1,6 @@
 import requests
 import json
+from newspaper import Article
 
 class Articulo:
     title=""
@@ -13,6 +14,7 @@ class Articulo:
     highlighted=""
     lead=""
     paragraphs=""
+    top_image=""
 
     
     def __init__(self, site_name, title, text, url, published_date):
@@ -21,6 +23,7 @@ class Articulo:
         self.site_name=site_name
         self.url=url
         self.published_date = published_date
+        #self.top_image = self.getImage(url)
 
     def printTitle(self):
         print(self.site_name + "   "+self.title)
@@ -44,3 +47,10 @@ class Articulo:
         url = 'http://172.16.13.13/WebScrapper/api/newarticle/'
         request = requests.post(url, json={"title": title,"text": text,"site_name": site_name,"category": null,"highlighted": null,"lead": null,"paragraphs": null,"published_date": fecha,"subtitle": null,"tags": null,"url": url_a}, headers=headers)
         print(str(request.status_code) + ": "+"Site: "+ site_name +  ">> "+title)
+
+    def getImage(url):
+        article = Article(url)
+        article.download()
+        article.parse()
+        return article.top_image
+    

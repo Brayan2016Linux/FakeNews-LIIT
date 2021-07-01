@@ -9,7 +9,9 @@
             <div class="panel-body">
                 <div class="scrapper-list">
                     <div class="col-sm-offset-1 col-sm-10">
-                        <button type="submit" class="btn btn-info">www.teletica.com</button>
+                    <form action="#" method="get">
+                        <input type="submit" value="www.teletica.com" name="teletica-btn"/>
+                        <input type="submit" value="www.crhoy.com" name="crhoy-btn"/>
                         <button type="submit" class="btn btn-info">www.nacion.com</button>
                         <button type="submit" class="btn btn-info">www.nacion.com</button>
                         <button type="submit" class="btn btn-info">www.ameliarueda.com</button>
@@ -18,9 +20,42 @@
                         <button type="submit" class="btn btn-info">www.repretel.com</button>
                         <button type="submit" class="btn btn-info">www.larepublica.net</button>
                         <button type="submit" class="btn btn-success">Todos los sitios</button>
+                    </form>
                     </div>
                 </div>
-             
+                <div class="container" xmlns:data="http://www.w3.org/1999/xhtml">
+                    <!--        slideshow starts here
+                    Ref: https://www.codewithharry.com/videos/python-django-tutorials-hindi-34-->
+                   
+                        <h1>{{articulos.0.site_name}}</h1>
+                        <div id="demo" class="carousel slide my-3" data-ride="carousel">
+                            
+
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    {% for i in articulos %}
+                                    <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="card" style="width: 18rem;">
+                                        <img src='{{i.top_image}}' class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                        <h5 class="card-title">{{i.site_name}}</h5>
+                                        <p class="card-text">{{i.title}}</p>
+                                        <a href="search/?url={{i.url}}&analizar-btn=search" class="btn btn-primary">Revisar</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev " href="#demo" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true" ></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#demo" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                
+                    </div>
             </div>
         </div>
     </div>

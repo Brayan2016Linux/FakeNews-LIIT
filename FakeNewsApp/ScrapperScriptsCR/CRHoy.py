@@ -1,6 +1,6 @@
 import bs4
-import Herramientas
-from Articulo import Articulo
+from .Herramientas import *
+from .Articulo import Articulo
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -14,7 +14,7 @@ class CRHoy:
     def scrap(self):
         
         try:
-            r = Herramientas.get_especial('https://www.crhoy.com/site/dist/json/index2.json?v=')
+            r = get_especial('https://www.crhoy.com/site/dist/json/index2.json?v=')
             j = json.loads(r)
             for x in range (0,4) :
                 self.links.append(j['slider'][x]['url'])
@@ -46,7 +46,7 @@ class CRHoy:
                 published_date=""
                 try:
 
-                    info1 = Herramientas.get_especial(link)
+                    info1 = get_especial(link)
                     sou = BeautifulSoup(info1, 'html.parser')
                     contenidos =sou.find('div', attrs={'class': 'contenido'})
                      

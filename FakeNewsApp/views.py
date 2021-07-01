@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import validators
+import math
 from .models import Verbo
 from .models import Dominio
 import requests,json
@@ -14,16 +15,36 @@ from .tokenizer_text import tokenize_text as tkt
 from .data_graph import data_graph as tg
 import whois
 from .domainCert import *
+from .ScrapperScriptsCR import ScrapperMain 
 
 
 def scrapperView(request):
-    return render(request,"FakeNewsApp/scrapper.html")
+    if request.GET.get('teletica-btn'):
+        articulos = []
+        articulos = ScrapperMain.scrapTeletica()
+        n= len(articulos)
+        nSlides= n//4 + math.ceil((n/4)-(n//4))
+        param = {'articulos':articulos, 'nSlides':nSlides}
+        return render(request,"FakeNewsApp/scrapper.html", param)   
+
+    if request.GET.get('crhoy-btn'):
+        articulos = []
+        articulos = ScrapperMain.scrapCRHoy()
+        n= len(articulos)
+        nSlides= n//4 + math.ceil((n/4)-(n//4))
+        param = {'articulos':articulos, 'nSlides':nSlides}
+        return render(request,"FakeNewsApp/scrapper.html", param)  
+
+    else:
+        return render(request,"FakeNewsApp/scrapper.html")
+    
+    
+    
 
 def indexView(request):
-    
-    if(request.POST):
-        url_data = request.POST.dict()
-        url_main = url_data.get("url")
+    if request.GET.get('analizar-btn'):
+        print("Si entro CRHOY !!!!!!!!!!!")
+        url_main = request.GET['url']
         
         if url_main is not "":
             valid=validators.url(url_main)
