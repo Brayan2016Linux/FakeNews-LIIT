@@ -57,6 +57,7 @@ class data_graph():
         self.__version___="0.0.4"
         self.graph_html_string = ""
         self.nodeFreq_html_string = ""
+        self.gexf_string =""
 
     def create_graph(self):
         """create_graph: crea el grafo agregando las aristas según el archivo
@@ -1013,14 +1014,15 @@ class data_graph():
             output_name = save_as + '.gexf'
     
         #save file:
-        with open(output_name, 'w', encoding='utf-8') as file:
-            file.write(gexf)
+        #with open(output_name, 'w', encoding='utf-8') as file:
+        #    file.write(gexf)
             
         import io  #return text with gexf as file --> added 06/10/2021
         f = io.StringIO(gexf)
         gexf = f.getvalue()
-
-        return gexf #return text with gexf --> added 04/07/2021
+        self.gexf_string = gexf
+        
+        #return gexf #return text with gexf --> added 04/07/2021
 
 # =================================DRAW GRAPH ===============================================
 
