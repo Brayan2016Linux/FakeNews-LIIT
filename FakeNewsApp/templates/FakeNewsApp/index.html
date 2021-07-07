@@ -85,6 +85,26 @@
                                             </figure>
                                         </div>
                                         <div>
+                                           <!--
+                                           <button id='network' onclick="download('word_network.gexf', '{{gexf_string|save}}');">download gexf file</button>
+                                           <script>
+                                                function download(filename, text) {
+                                                        var pom = document.createElement('a');
+                                                        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                                                        pom.setAttribute('download', filename);
+
+                                                        if (document.createEvent) {
+                                                                var event = document.createEvent('MouseEvents');
+                                                                event.initEvent('click', true, true);
+                                                                pom.dispatchEvent(event);
+                                                        } else {
+                                                                pom.click();
+                                                        }
+                                                }
+                                           </script>
+                                           -->        
+                                        </div>
+                                        <div>
                                             <h2><strong>Texto</strong></h2>
                                             <h3><strong>{{ article_text|safe }}</strong></h3>
 
