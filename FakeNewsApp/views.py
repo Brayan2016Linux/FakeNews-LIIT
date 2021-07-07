@@ -115,7 +115,7 @@ def indexView(request):
                         hostinfo = get_certificate(url[2].replace("www.",""),443)
                         domainInfo = print_basic_info(hostinfo)
 
-                        graph_html, nodeFreq_html =graph(article.text)
+                        graph_html, nodeFreq_html =graph(article.text)  #Pendiente agregar variable: gexf_string
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
 
                         #graph_html= render_to_string('FakeNewsApp/graph1.html')
@@ -125,7 +125,7 @@ def indexView(request):
 
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
-                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo})
+                        return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo}) #Pendiente agregar 'gexf_string':gexf_string
                 else:
                     hit = False
                     errorHit="URL probablemente no valido"
@@ -203,12 +203,14 @@ def graph(text):
     #Create Graph:
     text_graph = tg(source, target)
     text_graph.plot_wordcloud(save=False,html=True)
-    #text_graph.plot_node_metric(metric='pagerank', html=True) Pendiente
+    #text_graph.plot_node_metric(metric='pagerank', html=True) #Por ahora sustituido con la nube de palabras
     text_graph.set_nx_layout(layout='spring')
-    # Pendiente implementar generacion del gephi
+    #Genera la red y la envía como html para ser renderizada por la página web:
     text_graph.draw_graph_metrics(save=False,html=True, metric='pagerank', with_labels=True, with_values=False)
+    #Generación texto para descargar gephi, (pendiente botón para descarga):
+    text_graph.save_to_gephi() #se crea variable text_graph.gexf_string
 
-    return text_graph.graph_html_string, text_graph.nodeFreq_html_string
+    return text_graph.graph_html_string, text_graph.nodeFreq_html_string #,text_graph.gexf_string #Devuelve las salidad de datagraph en formato texto
 
 
 
