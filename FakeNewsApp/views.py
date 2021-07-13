@@ -116,6 +116,8 @@ def indexView(request):
 
                         graph_html, nodeFreq_html, gexf_string=graph(article.text)  #Pendiente agregar variable: gexf_string
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
+                        gexf_string = str(gexf_string.replace("\\n",""))
+
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
                         param = {'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string}#Pendiente agregar 'gexf_string':gexf_string

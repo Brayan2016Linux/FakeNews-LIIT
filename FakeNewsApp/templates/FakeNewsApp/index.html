@@ -171,6 +171,26 @@
                                                             {{ nodeFreq_html|safe }}
                                                         </figure>
                                                     </div>
+
+                                                    <div>
+                                                        <button id='network' class="btn btn-success" onclick="download('{{ data.0|safe }}.gexf', {{gexf_string|stringformat:"r" }});">Descargar archivo gexf</button>
+                                                        <script>
+                                                            function download(filename, xmltext) {
+                                                                var pom = document.createElement('a');
+                                                                var bb = new Blob([xmltext], {type: 'application/octet-stream'});
+
+                                                                pom.setAttribute('href', window.URL.createObjectURL(bb));
+                                                                pom.setAttribute('download', filename);
+
+                                                                pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+                                                                pom.draggable = true; 
+                                                                pom.classList.add('dragout');
+
+                                                                pom.click();
+                                                            }
+                                                        </script>
+                                                    </div>
+
                                                     <div>
                                                         <h2><strong>Texto</strong></h2>
                                                         <h3 align="justify">{{ article_text|safe }}</h3>
