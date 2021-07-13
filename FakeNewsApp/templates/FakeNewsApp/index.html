@@ -21,6 +21,7 @@
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-success" value="search" name="analizar-btn">Analizar</button>
                                     </div>
+                                </input>
                                 </div>
                             </form> </h2 >
 
@@ -85,25 +86,25 @@
                                             </figure>
                                         </div>
                                         <div>
-                                           
-                                           <button id='network' class="btn btn-success" onclick="download('word_network.gexf', '{{gexf_string|safe}}');">Descargar archivo gexf</button>
-                                           <script>
-                                                function download(filename, text) {
-                                                        var pom = document.createElement('a');
-                                                        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-                                                        pom.setAttribute('download', filename);
+                                            <button id='network' class="btn btn-success" onclick="download('{{ data.0|safe }}.gexf', {{gexf_string|stringformat:"r" }});">Descargar archivo gexf</button>
+                                            <script>
+                                                function download(filename, xmltext) {
+                                                    var pom = document.createElement('a');
+                                                    var bb = new Blob([xmltext], {type: 'application/octet-stream'});
 
-                                                        if (document.createEvent) {
-                                                                var event = document.createEvent('MouseEvents');
-                                                                event.initEvent('click', true, true);
-                                                                pom.dispatchEvent(event);
-                                                        } else {
-                                                                pom.click();
-                                                        }
+                                                    pom.setAttribute('href', window.URL.createObjectURL(bb));
+                                                    pom.setAttribute('download', filename);
+
+                                                    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+                                                    pom.draggable = true; 
+                                                    pom.classList.add('dragout');
+
+                                                    pom.click();
                                                 }
-                                           </script>
-                                                
+                                            </script>
                                         </div>
+
+
                                         <div>
                                             <h2><strong>Texto</strong></h2>
                                             <h3><strong>{{ article_text|safe }}</strong></h3>

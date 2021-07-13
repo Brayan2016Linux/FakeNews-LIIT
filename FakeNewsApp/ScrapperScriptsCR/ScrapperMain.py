@@ -30,8 +30,6 @@ def scrapAll():
 def scrapCRHoy():
     crHoy = CRHoy()
     crHoy.scrap()
-    for c in crHoy.articulos:
-        c.printTitle()
     return crHoy.articulos
 
 def scrapDiarioExtra():
@@ -93,8 +91,6 @@ def scrapAmeliaRueda():
 def scrapTeletica():
     teletica = Teletica()
     teletica.scrap()
-    for n in teletica.articulos:
-        n.printTitle()
     return teletica.articulos
     
 

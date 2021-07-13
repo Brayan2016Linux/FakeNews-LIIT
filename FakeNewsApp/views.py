@@ -38,8 +38,7 @@ def scrapperView(request):
     else:
         return render(request,"FakeNewsApp/scrapper.html")
     
-    
-    
+
 
 def indexView(request):
     if request.GET.get('analizar-btn'):
@@ -52,8 +51,6 @@ def indexView(request):
                 r = requests.get(url_main)
                 url = url_main.split('/')
                 if len(url)>3 and (r.status_code == 200):
-                    
-                    
                     if Dominio.objects.filter(url=url[2]).exists():
                         dominios = Dominio.objects.get(url=url[2])
                         if dominios.blacklist:
@@ -85,16 +82,18 @@ def indexView(request):
                         hostinfo = get_certificate(url[2].replace("www.",""),443)
                         domainInfo = print_basic_info(hostinfo)
 
-                        graph_html, nodeFreq_html=graph(article.text)  #Pendiente agregar variable: gexf_string
+                        graph_html, nodeFreq_html, gexf_string =graph(article.text)  #Pendiente agregar variable: gexf_string
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
+                        gexf_string = str(gexf_string.replace("\\n",""))
                         
                         
+                        #return HttpResponse(str(gexf_string), content_type='application/octet-stream') 
                         #domain = get_whois_data(url[2])
                         #whois.query('google.com')
 
                         data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         param = {'data':data, 'hit':hit, 'graph_html':graph_html, 
-                        'nodeFreq_html':nodeFreq_html,'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':"gexf_string"}
+                        'nodeFreq_html':nodeFreq_html,'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string}
                         return render(request,"FakeNewsApp/index.html", param)
                     else:
                         hit = False
@@ -115,18 +114,12 @@ def indexView(request):
                         hostinfo = get_certificate(url[2].replace("www.",""),443)
                         domainInfo = print_basic_info(hostinfo)
 
-                        graph_html, nodeFreq_html=graph(article.text)  #Pendiente agregar variable: gexf_string
+                        graph_html, nodeFreq_html, gexf_string=graph(article.text)  #Pendiente agregar variable: gexf_string
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
-
-                        #graph_html= render_to_string('FakeNewsApp/graph1.html')
-                        #nodeFreq_html = render_to_string('FakeNewsApp/node_freq.html')
-
-                        
-
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
-                        param = {'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':"gexf_string"}#Pendiente agregar 'gexf_string':gexf_string
-                        return render(request,"FakeNewsApp/index.html",) 
+                        param = {'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string}#Pendiente agregar 'gexf_string':gexf_string
+                        return render(request,"FakeNewsApp/index.html", param) 
                 else:
                     hit = False
                     errorHit="URL probablemente no valido"
@@ -135,9 +128,8 @@ def indexView(request):
                 hit = False
                 errorHit="URL probablemente no valido"
                 return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit})
-                
-        
-    return render(request, 'FakeNewsApp/index.html')
+
+
 
 
 
@@ -211,7 +203,7 @@ def graph(text):
     #Generación texto para descargar gephi, (pendiente botón para descarga):
     text_graph.save_to_gephi() #se crea variable text_graph.gexf_string
 
-    return text_graph.graph_html_string, text_graph.nodeFreq_html_string #,text_graph.gexf_string #Devuelve las salidad de datagraph en formato texto
+    return text_graph.graph_html_string, text_graph.nodeFreq_html_string, text_graph.gexf_string #Devuelve las salidad de datagraph en formato texto
 
 
 
