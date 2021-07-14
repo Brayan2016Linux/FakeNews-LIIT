@@ -12,8 +12,7 @@
                     <form action="#" method="get">
                         <input type="submit" value="www.teletica.com" name="teletica-btn"/>
                         <input type="submit" value="www.crhoy.com" name="crhoy-btn"/>
-                        <button type="submit" class="btn btn-info">www.nacion.com</button>
-                        <button type="submit" class="btn btn-info">www.nacion.com</button>
+                        <input type="submit" value="www.nacion.com" name="nacion-btn"/>
                         <button type="submit" class="btn btn-info">www.ameliarueda.com</button>
                         <button type="submit" class="btn btn-info">www.elmundo.cr</button>
                         <button type="submit" class="btn btn-info">www.crhoy.com</button>
@@ -36,7 +35,7 @@
                                     {% for i in articulos %}
                                     <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="card" style="width: 18rem;">
-                                        <img src='{{i.top_image}}' class="card-img-top" alt="...">
+                                        <img src='{{i.top_image}}' class="card-img-top" alt="Imagen pendiente">
                                         <div class="card-body">
                                         <h5 class="card-title">{{i.site_name}}</h5>
                                         <p class="card-text">{{i.title}}</p>

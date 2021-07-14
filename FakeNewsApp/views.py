@@ -34,6 +34,14 @@ def scrapperView(request):
         nSlides= n//4 + math.ceil((n/4)-(n//4))
         param = {'articulos':articulos, 'nSlides':nSlides}
         return render(request,"FakeNewsApp/scrapper.html", param)  
+    
+    if request.GET.get('nacion-btn'):
+        articulos = []
+        articulos = ScrapperMain.scrapNacion()
+        n= len(articulos)
+        nSlides= n//4 + math.ceil((n/4)-(n//4))
+        param = {'articulos':articulos, 'nSlides':nSlides}
+        return render(request,"FakeNewsApp/scrapper.html", param) 
 
     else:
         return render(request,"FakeNewsApp/scrapper.html")
@@ -130,7 +138,12 @@ def indexView(request):
                 hit = False
                 errorHit="URL probablemente no valido"
                 return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit})
-
+        else:
+                hit = False
+                errorHit="URL probablemente no valido"
+                return render(request,"FakeNewsApp/index.html",{'errorHit':errorHit,'hit':hit})   
+    else:
+        return render(request,"FakeNewsApp/index.html")
 
 
 

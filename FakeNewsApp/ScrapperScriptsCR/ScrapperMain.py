@@ -51,7 +51,7 @@ def scrapNacion():
     nacion.scrap()
     for n in nacion.articulos:
         n.printTitle()
-    return len(nacion.articulos)
+    return nacion.articulos
 
 def scrapRepretel():
     repretel = Repretel()

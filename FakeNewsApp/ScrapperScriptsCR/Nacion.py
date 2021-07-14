@@ -1,13 +1,43 @@
+from django.utils.html import linebreaks
 from .Herramientas import *
 from .Articulo import Articulo
 import requests
 from bs4 import BeautifulSoup
 from xml.etree.ElementTree import Element, SubElement, Comment
+import newspaper
+from newspaper import Article
 
 class Nacion:
     site_name="nacion.com" #nuevo
     links = []
     articulos = []
+
+    def alt_getArticle(self,link):
+        texto_articulo="" #nuevo
+        title = ""  #nuevo
+        info1 = get_simple(link)
+        sou = BeautifulSoup(info1, 'html.parser')
+        published_date = sou.find('time')
+        published_date = published_date.text 
+        title = sou.find('h1', attrs={'class': 'primary-font__PrimaryFontStyles-o56yd5-0 dEdODy headline'})
+        title = title.text
+
+        sou = sou.find('article',attrs={'class':'default__ArticleBody-xb1qmn-2 hIbUDc article-body-wrapper'})
+        for txt in  sou.find_all('h2'):
+            texto_articulo += " "+ txt.text
+        
+        for txt in  sou.find_all('p'):
+            texto_articulo += " "+ txt.text
+
+        return title, texto_articulo, published_date
+
+    def getArticle(self, link):
+        article = Article(link)
+        article.download()
+        article.parse() 
+
+        return article.title,article.text, article.publish_date
+
 
     def scrap(self):
         
@@ -16,49 +46,37 @@ class Nacion:
             
             
             homePage = BeautifulSoup(r.content, 'html.parser')
-            #portada  = homePage.find('main', attrs= {'class', 'ar-app nuxt-page-container'})
-            portada = homePage.find('section', {'id': 'main-content'})
-            masHistorias = homePage.find('div', attrs={'class': 'pb-layout-item pb-chain pb-c-default-chain col-lg-9 col-md-9 col-sm-12 col-xs-12'})
-            masLeido = homePage.find('aside', attrs={'class', 'line-up most-read full clearfix'})
+            portada = homePage.find('div', attrs={'class': 'container-fluid double-chain chain-container'})
+            ultimasNoticias = homePage.find('aside', attrs={'class':'col-sm-md-12 col-lg-xl-4 right-article-section ie-flex-100-percent-sm layout-section wrap-bottom'})
+            destacado = homePage.find('div', attrs={'class', 'top-table-list-section top-table-list-section-small row'})
 
-            for x in portada.find_all('div',attrs={'class', 'headline xx-small normal-style'}):     #nuevo
+            for x in portada.find_all('h2'):     #nuevo
                 x = x.find('a',href=True)
-                if not x.has_attr('class'): #nuevo
-                    self.links.append("https://www.nacion.com" + x.attrs['href'])  #nuevo
+                self.links.append("https://www.nacion.com" + x.attrs['href'])  #nuevo
             
-
-            for ul in masHistorias.find_all('div', attrs={'class', 'headline small normal-style'}):
-                l = ul.find('a',href=True)
-                if not l.has_attr('class'): #nuevo
-                    self.links.append("https://www.nacion.com" + l.attrs['href'])  #nuevo
+            ultimasNoticias = ultimasNoticias.find('div',attrs={'class':'top-table-list-container layout-section'})
+            for x in ultimasNoticias.find_all('h2'):
+                x = x.find('a',href=True)
+                self.links.append("https://www.nacion.com" + x.attrs['href'])  #nuevo
             
-            for ul in masLeido.find_all('div', attrs={'class', 'most-read-text'}):
-                ul = ul.find('a',href=True)
-                if ul.has_attr('href'): #nuevo
-                    self.links.append("https://www.nacion.com" + ul.attrs['href'])  #nuevo
+            for x in destacado.find_all('h2'):
+                x = x.find('a',href=True)
+                self.links.append("https://www.nacion.com" + x.attrs['href'])  #nuevo
             
             self.links = list(dict.fromkeys(self.links)) # Elimina duplicados
 
             for link in self.links:
-                texto_articulo="" #nuevo
-                title = ""  #nuevo
+                
                 try:
-
-                    info1 = Herramientas.get_simple(link)
-                    sou = BeautifulSoup(info1, 'html.parser')
-
-                    #date = sou.find('a', attrs={'class': 'date'})
-                    published_date = None #pediente: hay que tomar la fecha en el momento que se toma el link
-                    url = link
-                    for txt in  sou.find_all('p', attrs={'class': 'element element-paragraph'}):
-                        texto_articulo += " "+ txt.text
                     
-                    # Titulo
-                    titulo = sou.find('div', attrs={'class': 'headline-hed-last'})
-                    title = titulo.text
-                    self.articulos.append(Articulo(self.site_name,title,texto_articulo,url,published_date))
+                    title, texto_articulo, published_date= self.getArticle(link)
+                    if len(texto_articulo)>200:
+                        title, texto_articulo, published_date= self.alt_getArticle(link)
+                    self.articulos.append(Articulo(self.site_name,title,texto_articulo,link,published_date))
+
                 except Exception as e:
                     err = str(e) + "-NACION-" + str(link) + "---"
+                    print(err)
 
         except Exception as e:
             err = str(e) + "-NACION-"
