@@ -15,7 +15,7 @@ from .tokenizer_text import tokenize_text as tkt
 from .data_graph import data_graph as tg
 import whois
 from .domainCert import *
-from .ScrapperScriptsCR import ScrapperMain 
+from .ScrapperScriptsCR import ScrapperMain, CRHoy
 
 
 def scrapperView(request):
@@ -54,11 +54,10 @@ def indexView(request):
         
         if url_main is not "":
             valid=validators.url(url_main)
-            
             if valid:
                 r = requests.get(url_main)
                 url = url_main.split('/')
-                if len(url)>3 and (r.status_code == 200):
+                if len(url)>3 and (r.status_code == 200 or r.status_code == 403):
                     if Dominio.objects.filter(url=url[2]).exists():
                         dominios = Dominio.objects.get(url=url[2])
                         if dominios.blacklist:
@@ -73,35 +72,40 @@ def indexView(request):
                         else:
                             black = "No definido"
                         hit = True
-                        article = Article(url_main)
-                        article.download()
-                        article.parse()     
-
                         authors = ""
-                        for a in article.authors:
-                            authors += a + ", "
-                        authors = authors[:-2]
+                        if str(dominios) == 'www.crhoy.com':
+                            crh = CRHoy.CRHoy()
+                            title, text, publish_date= crh.getArticle(url_main)
+                            publish_date = None
+                            top_image=None
+                            imgSearch = None
+                        else:
+                            article = Article(url_main)
+                            article.download()
+                            article.parse()
+                            text = article.text   
+                            publish_date = article.publish_date
+                            top_image=article.top_image
+                            for a in article.authors:
+                                authors += a + ", "
+                            authors = authors[:-2] 
+                            imgSearch = searchImg(article.top_image) 
 
                         figCap = getNyTimesImgDesc(url_main)
-                        imgSearch = searchImg(article.top_image)
-
-                        quotes= getQuotes(article.text)
+                        quotes= getQuotes(text)
 
                         hostinfo = get_certificate(url[2].replace("www.",""),443)
                         domainInfo = print_basic_info(hostinfo)
 
-                        graph_html, nodeFreq_html, gexf_string =graph(article.text)  #Pendiente agregar variable: gexf_string
+                        graph_html, nodeFreq_html, gexf_string =graph(text)  #Pendiente agregar variable: gexf_string
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
                         gexf_string = str(gexf_string.replace("\\n",""))
-                        
-                        
-                        #return HttpResponse(str(gexf_string), content_type='application/octet-stream') 
                         #domain = get_whois_data(url[2])
                         #whois.query('google.com')
 
-                        data= [url[2], black, str(dominios.confianza), authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
+                        data= [url[2], black, str(dominios.confianza), authors , publish_date, top_image,figCap,imgSearch,quotes]
                         param = {'data':data, 'hit':hit, 'graph_html':graph_html, 
-                        'nodeFreq_html':nodeFreq_html,'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string}
+                        'nodeFreq_html':nodeFreq_html,'article_text':text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string}
                         return render(request,"FakeNewsApp/index.html", param)
                     else:
                         hit = False
