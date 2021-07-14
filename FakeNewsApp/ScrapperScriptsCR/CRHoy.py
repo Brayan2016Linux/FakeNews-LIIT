@@ -6,7 +6,7 @@ import json
 from bs4 import BeautifulSoup
 
 class CRHoy:
-    
+
     def __init__(self):
             self.site_name="www.crhoy.com"
             self.links=[]
@@ -36,7 +36,7 @@ class CRHoy:
             for x in range(0,3):
                 self.links.append(j['deportes'][x]['url'])
             
-            for x in range(0,3):
+            for x in range(0,1):
                 self.links.append(j['enterese'][x]['url'])
            
             self.links = list(dict.fromkeys(self.links)) # Elimina duplicados
@@ -44,7 +44,6 @@ class CRHoy:
             for link in self.links :
                 title=""
                 text=""
-                url=link
                 published_date=""
                 try:
 
@@ -79,7 +78,7 @@ class CRHoy:
                         published_date = None
                         err = str(e) + "-CRHOY-" + str(link) + "No se logro obtener la fecha del articulo !"
                         print(err+"\nNo se logro obtener la fecha del articulo !")
-                    self.articulos.append(Articulo(self.site_name,title,text,url,published_date))
+                    self.articulos.append(Articulo(self.site_name,title,text,link,published_date))
                 except Exception as e:
                     err = str(e) + "-CRHOY-" + str(link) + "---"
                     print(err)
@@ -122,4 +121,3 @@ def limpiarFecha(fecha):
         fechaLimpia = dia+'/'+mes+'/'+t[2]+' '+t[3]+' '+t[4]
         
         return fechaLimpia
-

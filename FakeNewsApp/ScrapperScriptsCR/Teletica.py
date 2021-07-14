@@ -6,12 +6,9 @@ from xml.etree.ElementTree import Element, SubElement, Comment
 import json
 
 class Teletica:
-    site_name="teletica.com"
-    links = []
-    articulos = [] #nuevo
 
     def __init__(self):
-            self.site_name="teletica.com"
+            self.site_name="www.teletica.com"
             self.links=[]
             self.articulos=[]
 
