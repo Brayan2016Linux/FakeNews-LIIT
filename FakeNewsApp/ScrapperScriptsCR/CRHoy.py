@@ -6,9 +6,11 @@ import json
 from bs4 import BeautifulSoup
 
 class CRHoy:
-    site_name="crhoy.com"
-    articulos = [] 
-    links = []
+    
+    def __init__(self):
+            self.site_name="www.crhoy.com"
+            self.links=[]
+            self.articulos=[]
     
     
     def scrap(self):

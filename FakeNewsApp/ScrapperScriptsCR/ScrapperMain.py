@@ -49,8 +49,6 @@ def  scrapMonumental():
 def scrapNacion():
     nacion = Nacion()
     nacion.scrap()
-    for n in nacion.articulos:
-        n.printTitle()
     return nacion.articulos
 
 def scrapRepretel():

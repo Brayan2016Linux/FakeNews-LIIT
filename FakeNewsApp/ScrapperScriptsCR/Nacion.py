@@ -8,9 +8,12 @@ import newspaper
 from newspaper import Article
 
 class Nacion:
-    site_name="nacion.com" #nuevo
-    links = []
-    articulos = []
+    
+
+    def __init__(self):
+            self.site_name="www.nacion.com"
+            self.links=[]
+            self.articulos=[]
 
     def alt_getArticle(self,link):
         texto_articulo="" #nuevo
