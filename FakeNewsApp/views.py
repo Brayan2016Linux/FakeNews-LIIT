@@ -43,6 +43,14 @@ def scrapperView(request):
         nSlides= n//4 + math.ceil((n/4)-(n//4))
         param = {'articulos':articulos, 'nSlides':nSlides}
         return render(request,"FakeNewsApp/scrapper.html", param) 
+    
+    if request.GET.get('amelia-btn'):
+        articulos = []
+        articulos = ScrapperMain.scrapAmeliaRueda()
+        n= len(articulos)
+        nSlides= n//4 + math.ceil((n/4)-(n//4))
+        param = {'articulos':articulos, 'nSlides':nSlides}
+        return render(request,"FakeNewsApp/scrapper.html", param) 
 
     else:
         return render(request,"FakeNewsApp/scrapper.html")

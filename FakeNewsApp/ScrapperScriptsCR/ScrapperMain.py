@@ -84,7 +84,7 @@ def scrapAmeliaRueda():
     ameliaRueda.scrap()
     for n in ameliaRueda.articulos:
         n.printTitle()
-    return len(ameliaRueda.articulos)
+    return ameliaRueda.articulos
 
 def scrapTeletica():
     teletica = Teletica()
