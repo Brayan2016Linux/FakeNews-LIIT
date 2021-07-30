@@ -103,10 +103,11 @@ def indexView(request):
                         gexf_string = str(gexf_string.replace("\\n",""))
                         #domain = get_whois_data(url[2])
                         #whois.query('google.com')
-
+                        rd_score = readability_score(text) #Agrega índice de readability
+                        rd_score = rd_score.split('. ')
                         data= [url[2], black, str(dominios.confianza), authors , publish_date, top_image,figCap,imgSearch,quotes]
                         param = {'data':data, 'hit':hit, 'graph_html':graph_html, 
-                        'nodeFreq_html':nodeFreq_html,'article_text':text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string}
+                        'nodeFreq_html':nodeFreq_html,'article_text':text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string,'rd_score':rd_score}
                         return render(request,"FakeNewsApp/index.html", param)
                     else:
                         hit = False
@@ -132,10 +133,10 @@ def indexView(request):
                         gexf_string = str(gexf_string.replace("\\n",""))
                         
                         rd_score = readability_score(article.text) #Agrega índice de readability
-
+                        rd_score = rd_score.split('. ')
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
-                        param = {'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string, 'rd_score':rd_score}#Pendiente agregar 'gexf_string':gexf_string
+                        param = {'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string, 'rd_score':rd_score}
                         return render(request,"FakeNewsApp/index.html", param) 
                 else:
                     hit = False

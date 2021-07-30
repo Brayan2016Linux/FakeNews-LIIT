@@ -625,7 +625,7 @@ class readability:
     # ============================== Análisis de texto ===============================
 
     def general_count_w(self):
-        output_score = 'Número de sílabas: %s.\nNúmero de palabras: %s.\nNúmero de oraciones: %s.\n'%(self.num_syllables,self.num_words,self.num_sentences)
+        output_score = 'Número de sílabas: %s. Número de palabras: %s. Número de oraciones: %s'%(self.num_syllables,self.num_words,self.num_sentences)
         return output_score
 
     def fernandez_huerta_score_w(self):
@@ -633,7 +633,7 @@ class readability:
         output_score = ''
         fh = self.fernandez_huerta_score
         readability_fh = self.fernandez_huerta_readability_score()
-        output_score += 'Índice Fernandez Huerta: %0.2f. Nivel: %s. Grado escolar: %s.\n'%(fh, readability_fh[0], readability_fh[1])
+        output_score += 'Índice Fernandez Huerta: %0.2f. Nivel: %s. Grado escolar: %s. '%(fh, readability_fh[0], readability_fh[1])
         return output_score
         
     def szigriszt_pazos_score_w(self):
