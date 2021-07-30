@@ -13,6 +13,7 @@ from django.utils.html import format_html
 from django.template.loader import render_to_string
 from .tokenizer_text import tokenize_text as tkt
 from .data_graph import data_graph as tg
+from .readability import readability as rd
 import whois
 from .domainCert import *
 from .ScrapperScriptsCR import ScrapperMain, CRHoy
@@ -129,10 +130,12 @@ def indexView(request):
                         graph_html, nodeFreq_html, gexf_string=graph(article.text)  #Pendiente agregar variable: gexf_string
                         nodeFreq_html = str(nodeFreq_html).replace("\\n","").replace("b\'","").replace("\'","")
                         gexf_string = str(gexf_string.replace("\\n",""))
+                        
+                        rd_score = readability_score(article.text) #Agrega índice de readability
 
                         data= [url[2], authors , article.publish_date, article.top_image,figCap,imgSearch,quotes]
                         errorHit="No se puede determinar el nivel de confianza del dominio (aún no se encuentra en nuestras listas)"
-                        param = {'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string}#Pendiente agregar 'gexf_string':gexf_string
+                        param = {'errorHit':errorHit,'hit':hit, 'data':data,'graph_html':graph_html, 'nodeFreq_html':nodeFreq_html, 'article_text':article.text, 'dm_registrar': domainInfo, 'gexf_string':gexf_string, 'rd_score':rd_score}#Pendiente agregar 'gexf_string':gexf_string
                         return render(request,"FakeNewsApp/index.html", param) 
                 else:
                     hit = False
@@ -223,6 +226,12 @@ def graph(text):
     text_graph.save_to_gephi() #se crea variable text_graph.gexf_string
 
     return text_graph.graph_html_string, text_graph.nodeFreq_html_string, text_graph.gexf_string #Devuelve las salidad de datagraph en formato texto
+
+
+def readability_score(text):
+    rd_ = rd(text)
+    return rd_.fernandez_huerta_score_web + rd_.count_score_web
+    
 
 
 
