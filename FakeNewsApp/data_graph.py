@@ -209,7 +209,7 @@ class data_graph():
   # ================== WORDCLOUD =========================================================
 
     #Added 04/22/2021 modified: 06/14/2021
-    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, width=400, height=200, fig_size=[10,15], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
+    def plot_wordcloud(self, tail_number=25, ascending=True, save=False, save_as='word_cloud.png', html=False, html_name='word_cloud.html', mask_png=None, pad=0, width=400, height=200, fig_size=[10,15], background_color="white", max_words=1000, interpolation = 'bilinear', **kwargs):
         """Grafica la nube de palabras según los nodos descubiertos por la red.
         """
         import io
@@ -227,6 +227,7 @@ class data_graph():
 
         plt.figure(figsize=fig_size)
         plt.imshow(wc, interpolation=interpolation)
+        plt.tight_layout(pad=pad)
 
         plt.axis("off")
 
